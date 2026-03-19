@@ -29,7 +29,7 @@ The **attention–value wedge** exists when earlier exposure shifts attention mo
 | **YOOCHOOSE** | YES, direct S3 | YES | No | YES | YES | H1-H3 | **HIGH** |
 | UCI Clickstream | YES | YES | No | No | Partial | H1 only | LOW |
 | Retail Rocket | BLOCKED (Kaggle) | YES* | YES* | YES* | YES* | H1-H3* | BLOCKED |
-| Diginetica | BLOCKED | YES* | ? | YES* | YES* | H1-H5* | BLOCKED |
+| **Diginetica (CIKM 2016)** | PARTIAL (GDrive/Kaggle) | YES + SERP rank | No | YES | Relative (ms) | **H1-H5** | **HIGH POTENTIAL** |
 | **Coveo SIGIR eCom 2021** | FORM (free) | YES + impressions | YES | YES | YES (ms) | **H1-H5** | **HIGHEST POTENTIAL** |
 | Taobao | BLOCKED (Tianchi) | YES* | YES* | YES* | YES* | H1-H3* | BLOCKED |
 
@@ -219,7 +219,7 @@ The wedge is most consistent across categories: early exposure either helps cart
 3. **Session-level analysis.** Test whether sessions with more early-cart events have lower overall conversion rates.
 
 ### Medium Priority
-4. **Diginetica or Coveo data.** These datasets have search query context, which would enable direct intent proxies. Requires manual access.
+4. **Diginetica (CIKM Cup 2016).** Has search engine default rankings in the `items` column of train-queries.csv — this is the closest to exogenous exposure order in any candidate dataset. The ranking is algorithmic, not user-chosen, which partially addresses the endogeneity concern. Available via Google Drive (needs `gdown`) or Kaggle. Also has hashed query tokens, purchases, and 134M impressions across 574K sessions.
 5. **Within-item, across-session variation.** Exploit cases where the same item appears at different positions across different sessions (pseudo-random variation).
 6. **Non-linear specifications.** Test for threshold effects (e.g., first item viewed vs. all others).
 
