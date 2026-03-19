@@ -1,0 +1,6 @@
+specification,outcome,N,y_mean,R2,coef_early_exposure,se_early_exposure,pval_early_exposure,coef_norm_position,se_norm_position,pval_norm_position,coef_first_half,se_first_half,pval_first_half
+Y-M1: Purchase ~ EarlyExposure,was_purchased,4916787,0.36351361163296275,0.0011714310597769062,0.03527425242030484,0.00046781884453458257,0.0,,,,,,
+Y-M2: Purchase ~ NormPosition,was_purchased,4916787,0.36351361163296275,0.0006347004285151003,,,,-0.03353540872982987,0.0006026442870424353,0.0,,,
+Y-M3: Purchase ~ FirstHalf,was_purchased,4916787,0.36351361163296275,0.0006034168116074712,,,,,,,0.02369222782840821,0.00043439844793277086,0.0
+Y-M4: Purchase ~ EarlyExposure | BuyingSession,was_purchased,3283324,0.5443626641781317,0.007584016325451581,0.09419506219307648,0.000589069414798484,0.0,,,,,,
+Y-M5: Purchase ~ NormPosition | BuyingSession,was_purchased,3283324,0.5443626641781317,0.0014654056123643011,,,,-0.055427188027619735,0.0007887664040651406,0.0,,,

@@ -1,0 +1,92 @@
+[07:21:46] Loading REES46 data (2 shards)...
+[07:21:52] Total rows: 7,340,000
+[07:21:52] Columns: ['event_time', 'event_type', 'product_id', 'category_id', 'category_code', 'brand', 'price', 'user_id', 'user_session']
+[07:21:52] Event type distribution:
+event_type
+view        7136240
+purchase     110471
+cart          93289
+Name: count, dtype: int64
+[07:21:52] Parsing timestamps...
+[07:22:12] Constructing session-level variables...
+[07:22:13] Sessions with >=2 events: 1,062,160 out of 1,628,015
+[07:22:23] Rows after filtering: 6,774,145
+[07:22:23] Constructing analysis variables...
+[07:22:56] Views dataset shape: (6570563, 18)
+[07:22:56] Cart rate: 0.0248
+[07:22:56] Purchase rate: 0.0397
+[07:22:56] Cart rate | early_exposure=1: 0.0270
+[07:22:56] Cart rate | early_exposure=0: 0.0238
+[07:22:56] Purchase rate | early_exposure=1: 0.0395
+[07:22:56] Purchase rate | early_exposure=0: 0.0398
+[07:23:01] Saved processed views data.
+[07:23:01] ============================================================
+[07:23:01] RUNNING MAIN REGRESSIONS
+[07:23:01] ============================================================
+[07:23:01] 
+--- Model 1: Cart ~ Early Exposure ---
+[07:23:04]   M1a: Cart ~ EarlyExposure: N=6,570,563, y_mean=0.0248
+[07:23:04]     early_exposure: 0.003149 (SE=0.000134) p=0.0000 ***
+[07:23:07]   M1b: Cart ~ EarlyExposure + controls: N=6,570,563, y_mean=0.0248
+[07:23:07]     early_exposure: 0.003174 (SE=0.000134) p=0.0000 ***
+[07:23:07] 
+--- Model 2: Purchase ~ Early Exposure ---
+[07:23:08]   M2a: Purchase ~ EarlyExposure: N=6,570,563, y_mean=0.0397
+[07:23:08]     early_exposure: -0.000298 (SE=0.000164) p=0.0697 
+[07:23:10]   M2b: Purchase ~ EarlyExposure + controls: N=6,570,563, y_mean=0.0397
+[07:23:10]     early_exposure: -0.000297 (SE=0.000164) p=0.0704 
+[07:23:10] 
+--- Model 3: Purchase | Cart ~ Early Exposure ---
+[07:23:10]   Carted items: 162,893
+[07:23:10]   M3a: Purchase|Cart ~ EarlyExposure: N=162,893, y_mean=0.5024
+[07:23:10]     early_exposure: -0.014312 (SE=0.002617) p=0.0000 ***
+[07:23:10]   M3b: Purchase|Cart ~ EarlyExposure + controls: N=162,893, y_mean=0.5024
+[07:23:10]     early_exposure: -0.016510 (SE=0.002607) p=0.0000 ***
+[07:23:10] 
+--- Model 4: Continuous position effects ---
+[07:23:12]   M4a: Cart ~ NormPosition: N=6,570,563, y_mean=0.0248
+[07:23:12]     norm_position: 0.002745 (SE=0.000192) p=0.0000 ***
+[07:23:13]   M4b: Purchase ~ NormPosition: N=6,570,563, y_mean=0.0397
+[07:23:13]     norm_position: 0.015384 (SE=0.000245) p=0.0000 ***
+[07:23:13]   M4c: Purchase|Cart ~ NormPosition: N=162,893, y_mean=0.5024
+[07:23:13]     norm_position: 0.062886 (SE=0.003183) p=0.0000 ***
+[07:23:13] 
+--- Model 5: First half effects ---
+[07:23:14]   M5a: Cart ~ FirstHalf: N=6,570,563, y_mean=0.0248
+[07:23:14]     first_half: -0.001473 (SE=0.000122) p=0.0000 ***
+[07:23:16]   M5b: Purchase ~ FirstHalf: N=6,570,563, y_mean=0.0397
+[07:23:16]     first_half: -0.009331 (SE=0.000154) p=0.0000 ***
+[07:23:16]   M5c: Purchase|Cart ~ FirstHalf: N=162,893, y_mean=0.5024
+[07:23:16]     first_half: -0.046808 (SE=0.002477) p=0.0000 ***
+[07:23:16] 
+============================================================
+[07:23:16] QUANTIFYING THE ATTENTION-VALUE WEDGE
+[07:23:16] ============================================================
+[07:23:16] Cart rate: early=0.0270, late=0.0238, diff=0.31pp, ratio=1.132
+[07:23:16] Purchase rate: early=0.0395, late=0.0398, diff=-0.03pp, ratio=0.993
+[07:23:16] Purchase|Cart: early=0.4930, late=0.5073, diff=-1.43pp
+[07:23:16] WEDGE (cart_ratio - purchase_ratio): 0.140
+[07:23:16] 
+============================================================
+[07:23:16] ROBUSTNESS AND HETEROGENEITY ANALYSES
+[07:23:16] ============================================================
+[07:23:16] 
+--- E1: Category subgroup analysis ---
+[07:23:18]   electronics (N=2,317,968): cart_diff=0.45pp, purch_diff=0.20pp
+[07:23:19]   appliances (N=763,996): cart_diff=0.02pp, purch_diff=-0.35pp
+[07:23:19]   computers (N=390,143): cart_diff=0.04pp, purch_diff=-0.13pp
+[07:23:20]   apparel (N=296,711): cart_diff=0.00pp, purch_diff=-0.61pp
+[07:23:20]   furniture (N=263,379): cart_diff=0.01pp, purch_diff=-0.15pp
+[07:23:21]   auto (N=118,407): cart_diff=0.28pp, purch_diff=-0.10pp
+[07:23:21] 
+--- E2: Price dispersion as uncertainty proxy ---
+[07:23:22]   High price: cart_diff=0.46pp, purch_diff=0.18pp
+[07:23:26]   Low price: cart_diff=0.17pp, purch_diff=-0.24pp
+[07:23:26] 
+--- E3: Session length as intent proxy ---
+[07:23:28]   Short session (high intent): cart_diff=0.31pp, purch_diff=0.03pp
+[07:23:29]   Long session (low intent): cart_diff=-0.14pp, purch_diff=-0.87pp
+[07:23:29] 
+--- E4: Brand presence as uncertainty proxy ---
+[07:23:33]   Has brand (lower uncertainty): cart_diff=0.34pp, purch_diff=0.00pp
+[07:23:34]   No brand (higher uncertainty): cart_diff=0.02pp, purch_diff=-0.34pp

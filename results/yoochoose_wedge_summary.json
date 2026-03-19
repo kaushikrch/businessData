@@ -1,0 +1,10 @@
+{
+  "purchase_rate_early_all": 0.3874778619601236,
+  "purchase_rate_late_all": 0.35220360953981883,
+  "purchase_diff_pp_all": 3.5274252420304797,
+  "purchase_ratio_all": 1.1001530122487766,
+  "purchase_rate_early_buying": 0.6098204525374744,
+  "purchase_rate_late_buying": 0.5156253903443971,
+  "purchase_diff_pp_buying": 9.419506219307728,
+  "note": "All items are clicked; wedge = whether early-clicked items have higher purchase rates"
+}

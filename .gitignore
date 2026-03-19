@@ -1,0 +1,12 @@
+# Raw data files (too large for git)
+data_raw/
+data_processed/
+*.7z
+*.zip
+*.parquet
+*.dat
+*.csv.gz
+
+# Python
+__pycache__/
+*.pyc

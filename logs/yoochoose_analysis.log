@@ -1,0 +1,51 @@
+[07:23:42] Loading YOOCHOOSE clicks...
+[07:26:24] Total clicks: 33,003,944
+[07:26:24] Loading YOOCHOOSE buys...
+[07:26:28] Total buys: 1,150,753
+[07:26:28] Sessions with purchases: 509,696
+[07:26:30] Total sessions: 9,249,729
+[07:26:30] Sampling sessions for tractability...
+[07:26:38] Sampled clicks: 5,009,401
+[07:26:38] Sampled sessions: 1,009,696
+[07:26:38]   of which buying: 509,696
+[07:26:38] Constructing variables...
+[07:26:46] Analysis dataset: 4,916,787 clicks
+[07:26:46] Purchase rate (item-level): 0.3635
+[07:26:46] Purchase rate | early_exposure=1: 0.3875
+[07:26:46] Purchase rate | early_exposure=0: 0.3522
+[07:26:46] ============================================================
+[07:26:46] RUNNING MAIN REGRESSIONS
+[07:26:46] ============================================================
+[07:26:46] 
+--- H2: Purchase ~ Early Exposure (all clicks) ---
+[07:26:47]   Y-M1: Purchase ~ EarlyExposure: N=4,916,787, y_mean=0.3635
+[07:26:47]     early_exposure: 0.035274 (SE=0.000468) p=0.0000 ***
+[07:26:49]   Y-M2: Purchase ~ NormPosition: N=4,916,787, y_mean=0.3635
+[07:26:49]     norm_position: -0.033535 (SE=0.000603) p=0.0000 ***
+[07:26:50]   Y-M3: Purchase ~ FirstHalf: N=4,916,787, y_mean=0.3635
+[07:26:50]     first_half: 0.023692 (SE=0.000434) p=0.0000 ***
+[07:26:50] 
+--- H3: Purchase ~ Early Exposure | Buying Sessions ---
+[07:26:51]   Buying session clicks: 3,283,324
+[07:26:52]   Y-M4: Purchase ~ EarlyExposure | BuyingSession: N=3,283,324, y_mean=0.5444
+[07:26:52]     early_exposure: 0.094195 (SE=0.000589) p=0.0000 ***
+[07:26:52]   Y-M5: Purchase ~ NormPosition | BuyingSession: N=3,283,324, y_mean=0.5444
+[07:26:52]     norm_position: -0.055427 (SE=0.000789) p=0.0000 ***
+[07:26:52] 
+============================================================
+[07:26:52] QUANTIFYING THE ATTENTION-VALUE WEDGE (YOOCHOOSE)
+[07:26:52] ============================================================
+[07:26:52] All sessions: purchase_early=0.3875, purchase_late=0.3522, diff=3.53pp
+[07:26:52] Buying sessions: purchase_early=0.6098, purchase_late=0.5156, diff=9.42pp
+[07:26:52] 
+============================================================
+[07:26:52] ROBUSTNESS
+[07:26:52] ============================================================
+[07:26:52] 
+--- E1: Session length heterogeneity ---
+[07:26:53]   Short sessions (N=2,499,391): purch_early=0.3621, purch_late=0.3524, diff=0.97pp
+[07:26:53]   Long sessions (N=2,417,396): purch_early=0.4222, purch_late=0.3520, diff=7.02pp
+[07:26:53] 
+--- E2: Special offer heterogeneity ---
+[07:26:53]   Special offer (N=1,578,603): purch_early=0.4257, purch_late=0.3909, diff=3.48pp
+[07:26:54]   Regular (N=3,338,184): purch_early=0.3674, purch_late=0.3348, diff=3.26pp
