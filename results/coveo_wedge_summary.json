@@ -1,0 +1,24 @@
+{
+  "browsing": {
+    "source": "coveo_browsing",
+    "cart_rate_early": 0.044153729520594244,
+    "cart_rate_late": 0.03481121480465528,
+    "cart_diff_pp": 0.9342514715938964,
+    "cart_ratio": 1.2683765783057246,
+    "purchase_rate_early": 0.008507332812984327,
+    "purchase_rate_late": 0.005877734378882296,
+    "purchase_diff_pp": 0.26295984341020306,
+    "purchase_ratio": 1.4473829990599325,
+    "cond_purchase_early": 0.18582424088640784,
+    "cond_purchase_late": 0.1643921658196768,
+    "cond_purchase_diff_pp": 2.1432075066731033,
+    "cond_purchase_ratio": 1.1303716327348596
+  },
+  "search": {
+    "source": "coveo_search",
+    "click_rate_early": 0.0337636464416828,
+    "click_rate_late": 0.015358132616929364,
+    "click_diff_pp": 1.8405513824753437,
+    "click_ratio": 2.1984213370097434
+  }
+}

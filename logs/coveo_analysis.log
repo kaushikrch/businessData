@@ -1,0 +1,149 @@
+[08:34:47] ============================================================
+[08:34:47] PART A: BROWSING SESSION ANALYSIS
+[08:34:47] ============================================================
+[08:34:47] Loading browsing data in chunks (36M rows)...
+[08:35:02]   Processed chunk, kept 562,063 product events so far, 182,958 sessions
+[08:35:19]   Processed chunk, kept 1,133,611 product events so far, 371,425 sessions
+[08:35:35]   Processed chunk, kept 1,690,016 product events so far, 550,224 sessions
+[08:35:35]   Memory limit: sampling 300K sessions...
+[08:35:52]   Processed chunk, kept 2,253,485 product events so far, 484,544 sessions
+[08:36:08]   Processed chunk, kept 2,820,599 product events so far, 672,324 sessions
+[08:36:08]   Memory limit: sampling 300K sessions...
+[08:36:26]   Processed chunk, kept 3,381,988 product events so far, 480,839 sessions
+[08:36:42]   Processed chunk, kept 3,944,599 product events so far, 664,111 sessions
+[08:36:42]   Memory limit: sampling 300K sessions...
+[08:36:59]   Processed chunk, kept 4,509,716 product events so far, 485,384 sessions
+[08:37:15]   Processed chunk, kept 5,074,079 product events so far, 666,795 sessions
+[08:37:15]   Memory limit: sampling 300K sessions...
+[08:37:32]   Processed chunk, kept 5,632,808 product events so far, 478,655 sessions
+[08:37:48]   Processed chunk, kept 6,189,880 product events so far, 657,102 sessions
+[08:37:48]   Memory limit: sampling 300K sessions...
+[08:38:05]   Processed chunk, kept 6,738,896 product events so far, 475,811 sessions
+[08:38:21]   Processed chunk, kept 7,298,708 product events so far, 655,961 sessions
+[08:38:21]   Memory limit: sampling 300K sessions...
+[08:38:39]   Processed chunk, kept 7,859,442 product events so far, 480,483 sessions
+[08:38:55]   Processed chunk, kept 8,416,077 product events so far, 659,982 sessions
+[08:38:55]   Memory limit: sampling 300K sessions...
+[08:39:12]   Processed chunk, kept 8,978,550 product events so far, 483,201 sessions
+[08:39:28]   Processed chunk, kept 9,530,107 product events so far, 659,888 sessions
+[08:39:28]   Memory limit: sampling 300K sessions...
+[08:39:45]   Processed chunk, kept 10,092,357 product events so far, 484,762 sessions
+[08:39:46]   Processed chunk, kept 10,115,295 product events so far, 492,605 sessions
+[08:39:46] Total product events: 10,115,295
+[08:39:46] Total sessions: 492,605
+[08:39:46] Building item-level dataset from browsing sessions...
+[08:39:48] Item-level rows: 770,854
+[08:39:48] Dataset shape: (770854, 9)
+[08:39:48] Cart rate: 0.0381
+[08:39:48] Purchase rate: 0.0068
+[08:39:48] Early exposure fraction: 0.347
+[08:39:48] Merging product metadata...
+[08:39:49] Price coverage: 0.000
+[08:39:49] Category coverage: 1.000
+[08:39:49] 
+============================================================
+[08:39:49] PART A REGRESSIONS: Browsing Order
+[08:39:49] ============================================================
+[08:39:49] 
+--- H1: Cart (Attention) ~ View Position ---
+[08:39:49]   C-A1a: Cart ~ EarlyExposure: N=770,854, y_mean=0.0381
+[08:39:49]     early_exposure: 0.009343 (SE=0.000474) p=0.0000 ***
+[08:39:49]   C-A1b: Cart ~ Top3: N=770,854, y_mean=0.0381
+[08:39:49]     top3: 0.000208 (SE=0.000457) p=0.6489 
+[08:39:49]   C-A1c: Cart ~ NormPosition: N=770,854, y_mean=0.0381
+[08:39:49]     norm_position: -0.009643 (SE=0.000571) p=0.0000 ***
+[08:39:49]   SKIP C-A1d: Cart ~ EarlyExposure + price: too few obs (0)
+[08:39:49] 
+--- H2: Purchase ~ View Position ---
+[08:39:49]   C-A2a: Purchase ~ EarlyExposure: N=770,854, y_mean=0.0068
+[08:39:49]     early_exposure: 0.002630 (SE=0.000208) p=0.0000 ***
+[08:39:49]   C-A2c: Purchase ~ NormPosition: N=770,854, y_mean=0.0068
+[08:39:49]     norm_position: -0.002276 (SE=0.000255) p=0.0000 ***
+[08:39:49]   SKIP C-A2d: Purchase ~ EarlyExposure + price: too few obs (0)
+[08:39:49] 
+--- H3: Purchase | Cart ~ View Position ---
+[08:39:49]   Carted items: 29,336
+[08:39:49]   C-A3a: Purchase|Cart ~ EarlyExposure: N=29,336, y_mean=0.1730
+[08:39:49]     early_exposure: 0.021432 (SE=0.004543) p=0.0000 ***
+[08:39:49]   C-A3b: Purchase|Cart ~ NormPosition: N=29,336, y_mean=0.1730
+[08:39:49]     norm_position: -0.012898 (SE=0.005741) p=0.0247 *
+[08:39:49]   SKIP C-A3c: Purchase|Cart ~ EarlyExposure + price: too few obs (0)
+[08:39:49] 
+============================================================
+[08:39:49] QUANTIFYING THE ATTENTION-VALUE WEDGE (COVEO BROWSING)
+[08:39:49] ============================================================
+[08:39:49] Cart rate: early=0.0442, late=0.0348, diff=0.93pp, ratio=1.268
+[08:39:49] Purchase rate: early=0.0085, late=0.0059, diff=0.26pp, ratio=1.447
+[08:39:49] Purchase|Cart: early=0.1858, late=0.1644, diff=2.14pp, ratio=1.130
+[08:39:49] 
+--- Heterogeneity: Price ---
+[08:39:49] 
+--- Heterogeneity: Session length ---
+[08:39:49]   Short session (high intent) (N=454,753):
+[08:39:49]     Cart diff: 0.79pp
+[08:39:49]     Purchase diff: 0.19pp
+[08:39:49]   Long session (low intent) (N=316,101):
+[08:39:49]     Cart diff: 1.44pp
+[08:39:49]     Purchase diff: 0.39pp
+[08:39:49] 
+--- Position gradient (view position 1-15) ---
+[08:39:49]   Pos  1: cart=0.0434, purchase=0.00886, N=195,103
+[08:39:49]   Pos  2: cart=0.0359, purchase=0.00683, N=195,103
+[08:39:49]   Pos  3: cart=0.0328, purchase=0.00577, N=112,273
+[08:39:49]   Pos  4: cart=0.0324, purchase=0.00523, N=71,266
+[08:39:49]   Pos  5: cart=0.0343, purchase=0.00543, N=47,913
+[08:39:49]   Pos  6: cart=0.0363, purchase=0.00602, N=33,381
+[08:39:49]   Pos  7: cart=0.0382, purchase=0.00563, N=24,349
+[08:39:49]   Pos  8: cart=0.0398, purchase=0.00711, N=18,292
+[08:39:49]   Pos  9: cart=0.0435, purchase=0.00556, N=14,027
+[08:39:49]   Pos 10: cart=0.0408, purchase=0.00511, N=10,753
+[08:39:49]   Pos 11: cart=0.0427, purchase=0.00636, N=8,496
+[08:39:49]   Pos 12: cart=0.0444, purchase=0.00560, N=6,783
+[08:39:49]   Pos 13: cart=0.0465, purchase=0.00670, N=5,526
+[08:39:49]   Pos 14: cart=0.0468, purchase=0.00515, N=4,462
+[08:39:49]   Pos 15: cart=0.0444, purchase=0.00694, N=3,603
+[08:39:49] 
+============================================================
+[08:39:49] PART B: SEARCH RANK ANALYSIS
+[08:39:49] ============================================================
+[08:39:49] Loading search data...
+[08:39:59] Search events: 819,516
+[08:40:00] Search events with results: 602,754
+[08:40:00] Sampled to 100,000
+[08:40:07] Search item-position rows: 1,771,329
+[08:40:08] Search dataset shape: (1771329, 10)
+[08:40:08] Click rate: 0.0205
+[08:40:08] Early exposure fraction: 0.281
+[08:40:08] 
+--- Search Rank: Click ~ Rank Position ---
+[08:40:08]   C-B1a: Click ~ EarlyExposure (Search): N=1,771,329, y_mean=0.0205
+[08:40:08]     early_exposure: 0.018406 (SE=0.000278) p=0.0000 ***
+[08:40:08]   C-B1b: Click ~ Top5 (Search): N=1,771,329, y_mean=0.0205
+[08:40:08]     top5: 0.031733 (SE=0.000325) p=0.0000 ***
+[08:40:09]   C-B1c: Click ~ NormRank (Search): N=1,771,329, y_mean=0.0205
+[08:40:09]     norm_rank: -0.026562 (SE=0.000396) p=0.0000 ***
+[08:40:09]   SKIP C-B1d: Click ~ EarlyExposure + price (Search): too few obs (0)
+[08:40:09] 
+--- Search position gradient (rank 1-20) ---
+[08:40:09]   Rank  1: click=0.0667, N=92,432
+[08:40:09]   Rank  2: click=0.0556, N=92,432
+[08:40:09]   Rank  3: click=0.0389, N=88,015
+[08:40:09]   Rank  4: click=0.0317, N=85,157
+[08:40:09]   Rank  5: click=0.0258, N=82,945
+[08:40:09]   Rank  6: click=0.0254, N=80,718
+[08:40:09]   Rank  7: click=0.0196, N=78,513
+[08:40:09]   Rank  8: click=0.0188, N=76,828
+[08:40:09]   Rank  9: click=0.0165, N=75,021
+[08:40:09]   Rank 10: click=0.0162, N=73,472
+[08:40:09]   Rank 11: click=0.0140, N=72,119
+[08:40:09]   Rank 12: click=0.0136, N=70,679
+[08:40:09]   Rank 13: click=0.0115, N=69,004
+[08:40:09]   Rank 14: click=0.0120, N=67,594
+[08:40:09]   Rank 15: click=0.0111, N=66,222
+[08:40:09]   Rank 16: click=0.0108, N=64,983
+[08:40:09]   Rank 17: click=0.0097, N=63,934
+[08:40:09]   Rank 18: click=0.0092, N=62,827
+[08:40:09]   Rank 19: click=0.0088, N=61,761
+[08:40:09]   Rank 20: click=0.0092, N=60,870
+[08:40:09] 
+Search wedge: click early=0.0338, late=0.0154, diff=1.84pp, ratio=2.198
