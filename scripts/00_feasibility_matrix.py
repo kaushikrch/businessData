@@ -81,8 +81,8 @@ datasets = [
         "exposure_order": "BEST: train-queries.csv 'items' column lists products in DEFAULT RANKED ORDER from search engine",
         "hypothesis_coverage": "H1-H5 (search rank = near-exogenous exposure order; hashed query tokens for intent; categories)",
         "key_limitations": "No absolute timestamps. Requires gdown or Kaggle auth. No explicit license. Query tokens are hashed. 574K sessions, 134M impressions.",
-        "overall_rating": "HIGH POTENTIAL - search engine ranking provides closest-to-exogenous exposure order. Worth manual download.",
-        "downloaded": False,
+        "overall_rating": "HIGH - search engine ranking provides closest-to-exogenous exposure order.",
+        "downloaded": True,
     },
     {
         "dataset": "Coveo SIGIR eCom 2021",

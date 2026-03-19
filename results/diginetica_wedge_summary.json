@@ -1,0 +1,15 @@
+{
+  "click_rate_early": 0.020140626113045627,
+  "click_rate_late": 0.01782513549691848,
+  "click_diff_pp": 0.23154906161271457,
+  "click_ratio": 1.1299003093989066,
+  "purchase_rate_early": 0.00032893771972830165,
+  "purchase_rate_late": 0.00036701047883446,
+  "purchase_diff_pp": -0.0038072759106158355,
+  "purchase_ratio": 0.89626247395696,
+  "cond_purchase_early": 0.010298554041402268,
+  "cond_purchase_late": 0.012516018795386587,
+  "cond_purchase_diff_pp": -0.22174647539843184,
+  "cond_purchase_ratio": 0.8228298638540175,
+  "wedge_click_ratio_minus_purchase_ratio": 0.2336378354419466
+}
