@@ -1,0 +1,123 @@
+[07:58:08] Loading Diginetica data...
+[07:58:14] Train queries: 636,160
+[07:58:15] Clicks: 1,127,764
+[07:58:15] Purchases: 18,025
+[07:58:15] Products: 184,047
+[07:58:15] Item views: 1,235,380
+[07:58:15] Constructing item-position dataset from search rankings...
+[07:58:16]   Sampled 63,650 queries from 636,160
+[07:58:33]   Building DataFrame from 1,790,608 item-position pairs...
+[07:58:35]   Item-position dataset shape: (1790608, 7)
+[07:58:35] Marking clicks and purchases...
+[07:58:38] Click rate: 0.0184
+[07:58:38] View rate: 0.0230
+[07:58:38] Purchase rate: 0.0004
+[07:58:38] Constructing exposure-order variables...
+[07:58:38] Dataset shape: (1790608, 15)
+[07:58:38] Early exposure (top quartile): 0.267
+[07:58:38] 
+Descriptive stats by early/late exposure:
+[07:58:38]   Early: click=0.0201, view=0.0246, purchase=0.0003, N=477,294
+[07:58:38]   Late: click=0.0178, view=0.0224, purchase=0.0004, N=1,313,314
+[07:58:38] 
+============================================================
+[07:58:38] MAIN REGRESSIONS
+[07:58:38] ============================================================
+[07:58:38] 
+--- H1: Click (Attention) ~ Search Rank Position ---
+[07:58:38]   D-M1a: Click ~ EarlyExposure: N=1,790,608, y_mean=0.0184
+[07:58:38]     early_exposure: 0.002315 (SE=0.000234) p=0.0000 ***
+[07:58:39]   D-M1b: Click ~ Top5: N=1,790,608, y_mean=0.0184
+[07:58:39]     top5: 0.009500 (SE=0.000304) p=0.0000 ***
+[07:58:39]   D-M1c: Click ~ NormRank: N=1,790,608, y_mean=0.0184
+[07:58:39]     norm_rank: -0.002351 (SE=0.000347) p=0.0000 ***
+[07:58:39]   D-M1d: Click ~ EarlyExposure + price: N=1,790,608, y_mean=0.0184
+[07:58:39]     early_exposure: 0.002217 (SE=0.000234) p=0.0000 ***
+[07:58:39] 
+--- H2: Purchase ~ Search Rank Position ---
+[07:58:40]   D-M2a: Purchase ~ EarlyExposure: N=1,790,608, y_mean=0.0004
+[07:58:40]     early_exposure: -0.000038 (SE=0.000031) p=0.2211 
+[07:58:40]   D-M2b: Purchase ~ Top5: N=1,790,608, y_mean=0.0004
+[07:58:40]     top5: 0.000047 (SE=0.000039) p=0.2224 
+[07:58:40]   D-M2c: Purchase ~ NormRank: N=1,790,608, y_mean=0.0004
+[07:58:40]     norm_rank: 0.000076 (SE=0.000048) p=0.1117 
+[07:58:41]   D-M2d: Purchase ~ EarlyExposure + price: N=1,790,608, y_mean=0.0004
+[07:58:41]     early_exposure: -0.000041 (SE=0.000031) p=0.1937 
+[07:58:41] 
+--- H3: Purchase | Click ~ Rank Position ---
+[07:58:41]   Clicked items: 33,023
+[07:58:41]   D-M3a: Purchase|Click ~ EarlyExposure: N=33,023, y_mean=0.0119
+[07:58:41]     early_exposure: -0.002217 (SE=0.001260) p=0.0785 
+[07:58:41]   D-M3b: Purchase|Click ~ NormRank: N=33,023, y_mean=0.0119
+[07:58:41]     norm_rank: 0.002445 (SE=0.001860) p=0.1887 
+[07:58:41]   D-M3c: Purchase|Click ~ EarlyExposure + price: N=33,023, y_mean=0.0119
+[07:58:41]     early_exposure: -0.002221 (SE=0.001261) p=0.0780 
+[07:58:41] 
+--- H3 alt: Purchase | View ~ Rank Position ---
+[07:58:41]   Viewed items: 41,156
+[07:58:41]   D-M3d: Purchase|View ~ EarlyExposure: N=41,156, y_mean=0.0103
+[07:58:41]     early_exposure: -0.002010 (SE=0.001056) p=0.0570 
+[07:58:41]   D-M3e: Purchase|View ~ NormRank: N=41,156, y_mean=0.0103
+[07:58:41]     norm_rank: 0.002810 (SE=0.001595) p=0.0781 
+[07:58:41] 
+============================================================
+[07:58:41] QUANTIFYING THE ATTENTION-VALUE WEDGE (DIGINETICA)
+[07:58:41] ============================================================
+[07:58:41] Click rate: early=0.0201, late=0.0178, diff=0.23pp, ratio=1.130
+[07:58:41] Purchase rate: early=0.0003, late=0.0004, diff=-0.00pp, ratio=0.896
+[07:58:41] Purchase|Click: early=0.0103, late=0.0125, diff=-0.22pp, ratio=0.823
+[07:58:41] WEDGE (click_ratio - purchase_ratio): 0.234
+[07:58:41] 
+============================================================
+[07:58:41] ROBUSTNESS AND HETEROGENEITY
+[07:58:41] ============================================================
+[07:58:41] 
+--- E1: Top-3 position analysis ---
+[07:58:41]   Top 3 (N=190,186): click=0.0276, purchase=0.0004
+[07:58:41]   Rank 4+ (N=1,600,422): click=0.0174, purchase=0.0004
+[07:58:41] 
+--- E2: Search query vs category browse (intent proxy) ---
+[07:58:41]   Text search (lower intent) (N=68,791):
+[07:58:41]     Click diff: -0.01pp (early=0.0533, late=0.0534)
+[07:58:41]     Purchase diff: -0.10pp (early=0.0003, late=0.0013)
+[07:58:41]   Category browse (higher intent) (N=1,721,817):
+[07:58:41]     Click diff: 0.25pp (early=0.0189, late=0.0164)
+[07:58:41]     Purchase diff: 0.00pp (early=0.0003, late=0.0003)
+[07:58:41] 
+--- E3: List length heterogeneity ---
+[07:58:42]   Short result list (N=1,790,608):
+[07:58:42]     Click diff: 0.23pp
+[07:58:42]     Purchase diff: -0.00pp
+[07:58:42]   Long result list (N=0):
+[07:58:42]     Click diff: nanpp
+[07:58:42]     Purchase diff: nanpp
+[07:58:42] 
+--- E4: Price heterogeneity ---
+[07:58:42]   High price (N=637,521):
+[07:58:42]     Click diff: 0.24pp
+[07:58:42]     Purchase diff: -0.00pp
+[07:58:42]   Low price (N=1,153,087):
+[07:58:42]     Click diff: 0.21pp
+[07:58:42]     Purchase diff: -0.00pp
+[07:58:42] 
+--- E5: Click and purchase rates by rank position (top 20) ---
+[07:58:42]   Rank  1: click=0.0312, purchase=0.00041, N=63,650
+[07:58:42]   Rank  2: click=0.0257, purchase=0.00039, N=63,395
+[07:58:42]   Rank  3: click=0.0258, purchase=0.00038, N=63,141
+[07:58:42]   Rank  4: click=0.0245, purchase=0.00041, N=62,968
+[07:58:42]   Rank  5: click=0.0241, purchase=0.00038, N=62,802
+[07:58:42]   Rank  6: click=0.0223, purchase=0.00046, N=62,612
+[07:58:42]   Rank  7: click=0.0212, purchase=0.00037, N=62,409
+[07:58:42]   Rank  8: click=0.0211, purchase=0.00040, N=62,262
+[07:58:42]   Rank  9: click=0.0209, purchase=0.00034, N=62,098
+[07:58:42]   Rank 10: click=0.0206, purchase=0.00031, N=61,963
+[07:58:42]   Rank 11: click=0.0184, purchase=0.00047, N=61,758
+[07:58:42]   Rank 12: click=0.0177, purchase=0.00037, N=61,512
+[07:58:42]   Rank 13: click=0.0182, purchase=0.00036, N=61,319
+[07:58:42]   Rank 14: click=0.0182, purchase=0.00039, N=61,074
+[07:58:42]   Rank 15: click=0.0171, purchase=0.00030, N=60,876
+[07:58:42]   Rank 16: click=0.0181, purchase=0.00043, N=60,700
+[07:58:42]   Rank 17: click=0.0167, purchase=0.00038, N=60,423
+[07:58:42]   Rank 18: click=0.0173, purchase=0.00033, N=60,192
+[07:58:42]   Rank 19: click=0.0174, purchase=0.00047, N=59,976
+[07:58:42]   Rank 20: click=0.0159, purchase=0.00035, N=59,627
