@@ -30,7 +30,7 @@ The **attention–value wedge** exists when earlier exposure shifts attention mo
 | UCI Clickstream | YES | YES | No | No | Partial | H1 only | LOW |
 | Retail Rocket | BLOCKED (Kaggle) | YES* | YES* | YES* | YES* | H1-H3* | BLOCKED |
 | Diginetica | BLOCKED | YES* | ? | YES* | YES* | H1-H5* | BLOCKED |
-| Coveo SIGIR | UNCERTAIN | YES* | YES* | YES* | YES* | H1-H5* | NOT TESTED |
+| **Coveo SIGIR eCom 2021** | FORM (free) | YES + impressions | YES | YES | YES (ms) | **H1-H5** | **HIGHEST POTENTIAL** |
 | Taobao | BLOCKED (Tianchi) | YES* | YES* | YES* | YES* | H1-H3* | BLOCKED |
 
 *Fields marked with asterisks indicate capabilities if the dataset were accessible.
@@ -213,8 +213,9 @@ The wedge is most consistent across categories: early exposure either helps cart
 ## 10. Recommended Next Steps
 
 ### High Priority
-1. **Manual download of Retail Rocket from Kaggle.** This dataset has view/cart/purchase with timestamps and would provide a third independent test. Requires Kaggle account.
-2. **Item fixed effects.** Run specifications with item fixed effects to control for item-level confounders. This is computationally intensive but feasible on a subset.
+1. **Coveo SIGIR eCom 2021 dataset.** This is the single most important next step. It has **impression-level data** (items shown in search results but not clicked), which enables a true exposure-order analysis with items-shown-but-not-clicked as counterfactuals. Also has add-to-cart, purchase, and search query vectors. Requires a free form submission at https://www.coveo.com/en/resources/datasets/sigir-ecom-2021-data-challenge-dataset.
+2. **Manual download of Retail Rocket from Kaggle.** This dataset has view/cart/purchase with timestamps and would provide a third independent test. Requires Kaggle account.
+3. **Item fixed effects.** Run specifications with item fixed effects to control for item-level confounders. This is computationally intensive but feasible on a subset.
 3. **Session-level analysis.** Test whether sessions with more early-cart events have lower overall conversion rates.
 
 ### Medium Priority
