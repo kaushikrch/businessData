@@ -1,0 +1,14 @@
+{
+  "cart_rate_early": 0.02695869643006209,
+  "cart_rate_late": 0.023809534339828256,
+  "cart_diff_pp": 0.31491620902338346,
+  "cart_ratio": 1.1322647492927218,
+  "purchase_rate_early": 0.03950856909093483,
+  "purchase_rate_late": 0.03980654103760734,
+  "purchase_diff_pp": -0.029797194667251226,
+  "purchase_ratio": 0.9925144978964386,
+  "conditional_purchase_early": 0.49295596117630014,
+  "conditional_purchase_late": 0.5072676443544567,
+  "conditional_purchase_diff_pp": -1.4311683178156565,
+  "wedge_cart_minus_purchase_ratio": 0.13975025139628316
+}
