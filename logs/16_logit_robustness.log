@@ -1,0 +1,80 @@
+[14:25:01] ============================================================
+[14:25:01] PART 1: Diginetica — Logit Robustness
+[14:25:01] ============================================================
+[14:25:01] Loading Diginetica data...
+[14:25:17] Train queries (non-test): 636,160
+[14:25:17] Sampled 63,650 queries from 636,160
+[14:25:17] Building item-position dataset...
+[14:25:29] Diginetica dataset: (1790608, 9)
+[14:25:29] Click rate: 0.0184, Purchase rate: 0.0004
+[14:25:29] 
+--- D-L1: Click ~ early_exposure (Logit) ---
+[14:25:35]   Click ~ early_exposure:
+[14:25:35]     LPM:    coef=0.002315 (SE=0.000234) ***
+[14:25:35]     Logit:  coef=0.124490 (SE=0.012233)
+[14:25:35]     Marginal effect at mean: 0.002250
+[14:25:35]     N=1,790,608
+[14:25:35] 
+--- D-L2: Purchase ~ early_exposure (Logit) ---
+[14:25:39]   Purchase ~ early_exposure:
+[14:25:39]     LPM:    coef=-0.000038 (SE=0.000031) 
+[14:25:39]     Logit:  coef=-0.109560 (SE=0.091907)
+[14:25:39]     Marginal effect at mean: -0.000039
+[14:25:39]     N=1,790,608
+[14:25:39] 
+--- D-L3: Click ~ rank_position (Logit) ---
+[14:25:43]   Click ~ rank_position:
+[14:25:43]     LPM:    coef=-0.000518 (SE=0.000012) ***
+[14:25:43]     Logit:  coef=-0.029204 (SE=0.000662)
+[14:25:43]     Marginal effect at mean: -0.000514
+[14:25:43]     N=1,790,608
+[14:25:43] 
+--- D-L4: Purchase ~ rank_position (Logit) ---
+[14:25:46]   Purchase ~ rank_position:
+[14:25:46]     LPM:    coef=-0.000005 (SE=0.000002) **
+[14:25:46]     Logit:  coef=-0.013277 (SE=0.004629)
+[14:25:46]     Marginal effect at mean: -0.000005
+[14:25:46]     N=1,790,608
+[14:25:47] 
+============================================================
+[14:25:47] PART 2: REES46 — Logit Robustness
+[14:25:47] ============================================================
+[14:25:47] Loading REES46 data (2 shards)...
+[14:25:55] Parsing timestamps...
+[14:26:11] Constructing within-session view order...
+[14:26:19] Views with session_length >= 2: 6,548,827
+[14:26:25] REES46 views dataset: (6548827, 15)
+[14:26:25] Cart rate: 0.0232, Purchase rate: 0.0373
+[14:26:25] 
+--- R-L1: Cart ~ early_exposure (Logit) ---
+[14:26:42]   Cart ~ early_exposure:
+[14:26:42]     LPM:    coef=-0.001825 (SE=0.000125) ***
+[14:26:42]     Logit:  coef=-0.081632 (SE=0.005698)
+[14:26:42]     Marginal effect at mean: -0.001852
+[14:26:42]     N=6,548,827
+[14:26:42] 
+--- R-L2: Purchase ~ early_exposure (Logit) ---
+[14:26:52]   Purchase ~ early_exposure:
+[14:26:52]     LPM:    coef=-0.008187 (SE=0.000153) ***
+[14:26:52]     Logit:  coef=-0.238735 (SE=0.004680)
+[14:26:52]     Marginal effect at mean: -0.008523
+[14:26:52]     N=6,548,827
+[14:26:52] 
+============================================================
+[14:26:52] SAVING RESULTS
+[14:26:52] ============================================================
+[14:26:54] Saved 6 rows to /home/user/businessData/results/logit_comparison.csv
+[14:26:54] 
+--- Summary: LPM vs Logit marginal effects ---
+[14:26:54]   Diginetica | Click ~ early_exposure:
+[14:26:54]     LPM coef=0.002315, Logit ME=0.002250, diff=0.000065
+[14:26:54]   Diginetica | Purchase ~ early_exposure:
+[14:26:54]     LPM coef=-0.000038, Logit ME=-0.000039, diff=0.000001
+[14:26:54]   Diginetica | Click ~ rank_position:
+[14:26:54]     LPM coef=-0.000518, Logit ME=-0.000514, diff=0.000005
+[14:26:54]   Diginetica | Purchase ~ rank_position:
+[14:26:54]     LPM coef=-0.000005, Logit ME=-0.000005, diff=0.000000
+[14:26:54]   REES46 | Cart ~ early_exposure:
+[14:26:54]     LPM coef=-0.001825, Logit ME=-0.001852, diff=0.000027
+[14:26:54]   REES46 | Purchase ~ early_exposure:
+[14:26:54]     LPM coef=-0.008187, Logit ME=-0.008523, diff=0.000337

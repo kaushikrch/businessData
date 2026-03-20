@@ -1,0 +1,95 @@
+[14:25:00] ============================================================
+[14:25:00] PART 1: REES46 — Clustered by user_session
+[14:25:00] ============================================================
+[14:25:00] Loading REES46 data (2 shards)...
+[14:25:15] Total rows: 7,340,000
+[14:25:15] Parsing timestamps...
+[14:25:25] Constructing within-session view order...
+[14:25:31] Views with session_length >= 2: 6,548,827
+[14:25:39] REES46 views dataset: (6548827, 15)
+[14:25:39] Cart rate: 0.0232, Purchase rate: 0.0373
+[14:25:39] Unique sessions: 1,040,284
+[14:25:39] 
+--- R1: Cart ~ early_exposure ---
+[14:25:51]   Cart ~ early_exposure:
+[14:25:51]     coef=-0.001825
+[14:25:51]     HC1:       SE=0.000125, p=0.0000 ***
+[14:25:51]     Clustered: SE=0.000118, p=0.0000 ***
+[14:25:51]     SE ratio (clustered/HC1): 0.938
+[14:25:51]     N=6,548,827, clusters=1,040,284
+[14:25:51] 
+--- R2: Purchase ~ early_exposure ---
+[14:26:08]   Purchase ~ early_exposure:
+[14:26:08]     coef=-0.008187
+[14:26:08]     HC1:       SE=0.000153, p=0.0000 ***
+[14:26:08]     Clustered: SE=0.000142, p=0.0000 ***
+[14:26:08]     SE ratio (clustered/HC1): 0.926
+[14:26:08]     N=6,548,827, clusters=1,040,284
+[14:26:08] 
+--- R3: Purchase|Cart ~ early_exposure ---
+[14:26:09]   Carted items: 152,225
+[14:26:09]   Purchase|Cart ~ early_exposure:
+[14:26:09]     coef=-0.026435
+[14:26:09]     HC1:       SE=0.002815, p=0.0000 ***
+[14:26:09]     Clustered: SE=0.002645, p=0.0000 ***
+[14:26:09]     SE ratio (clustered/HC1): 0.940
+[14:26:09]     N=152,225, clusters=48,836
+[14:26:09] 
+============================================================
+[14:26:09] PART 2: Diginetica — Clustered by queryId
+[14:26:09] ============================================================
+[14:26:09] Loading Diginetica data...
+[14:26:38] Train queries (non-test): 636,160
+[14:26:44] Clicks: 1,127,764, Purchases: 18,025
+[14:26:44] Sampled 63,650 queries from 636,160
+[14:26:44] Building item-position dataset...
+[14:26:55] Item-position dataset: (1790608, 5)
+[14:26:57] Click rate: 0.0184
+[14:26:57] Purchase rate: 0.0004
+[14:26:57] Unique queries: 63,650
+[14:26:57] 
+--- D-R1: Click ~ early_exposure ---
+[14:26:57]   Click ~ early_exposure:
+[14:26:57]     coef=0.002315
+[14:26:57]     HC1:       SE=0.000234, p=0.0000 ***
+[14:26:57]     Clustered: SE=0.000239, p=0.0000 ***
+[14:26:57]     SE ratio (clustered/HC1): 1.020
+[14:26:57]     N=1,790,608, clusters=63,650
+[14:26:58] 
+--- D-R2: Purchase ~ early_exposure ---
+[14:26:58]   Purchase ~ early_exposure:
+[14:26:58]     coef=-0.000038
+[14:26:58]     HC1:       SE=0.000031, p=0.2211 
+[14:26:58]     Clustered: SE=0.000031, p=0.2200 
+[14:26:58]     SE ratio (clustered/HC1): 0.998
+[14:26:58]     N=1,790,608, clusters=63,650
+[14:26:58] 
+--- D-R3: Click ~ rank_position ---
+[14:26:59]   Click ~ rank_position:
+[14:26:59]     coef=-0.000518
+[14:26:59]     HC1:       SE=0.000012, p=0.0000 ***
+[14:26:59]     Clustered: SE=0.000013, p=0.0000 ***
+[14:26:59]     SE ratio (clustered/HC1): 1.070
+[14:26:59]     N=1,790,608, clusters=63,650
+[14:26:59] 
+--- D-R4: Purchase ~ rank_position ---
+[14:27:00]   Purchase ~ rank_position:
+[14:27:00]     coef=-0.000005
+[14:27:00]     HC1:       SE=0.000002, p=0.0033 **
+[14:27:00]     Clustered: SE=0.000002, p=0.0035 **
+[14:27:00]     SE ratio (clustered/HC1): 1.005
+[14:27:00]     N=1,790,608, clusters=63,650
+[14:27:00] 
+============================================================
+[14:27:00] SAVING RESULTS
+[14:27:00] ============================================================
+[14:27:00] Saved 7 rows to /home/user/businessData/results/robust_regression_results.csv
+[14:27:00] 
+--- Summary: SE inflation from clustering ---
+[14:27:00]   REES46 | Cart ~ early_exposure: SE ratio=0.938
+[14:27:00]   REES46 | Purchase ~ early_exposure: SE ratio=0.926
+[14:27:00]   REES46 | Purchase|Cart ~ early_exposure: SE ratio=0.940
+[14:27:00]   Diginetica | Click ~ early_exposure: SE ratio=1.020
+[14:27:00]   Diginetica | Purchase ~ early_exposure: SE ratio=0.998
+[14:27:00]   Diginetica | Click ~ rank_position: SE ratio=1.070
+[14:27:00]   Diginetica | Purchase ~ rank_position: SE ratio=1.005
