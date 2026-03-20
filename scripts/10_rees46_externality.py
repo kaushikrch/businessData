@@ -133,6 +133,7 @@ views['norm_position'] = (views['view_rank'] - 1) / (views['session_length'] - 1
 
 # Items remaining in session
 views['items_remaining'] = views['session_length'] - views['view_rank']
+views['log_session_length'] = np.log(views['session_length'])
 
 log(f"Items with any_cart_before=1: {views['any_cart_before'].mean():.3f}")
 log(f"Items with any_purchase_before=1: {views['any_purchase_before'].mean():.3f}")
@@ -167,7 +168,6 @@ for outcome in ['was_carted', 'was_purchased']:
 
 # Regression: outcome ~ any_cart_before + norm_position + log(session_length)
 log("\nRegression: Cart/Purchase ~ any_cart_before + controls")
-later_items['log_session_length'] = np.log(later_items['session_length'])
 
 for outcome in ['was_carted', 'was_purchased']:
     X = later_items[['any_cart_before', 'norm_position', 'log_session_length']].copy()
