@@ -117,7 +117,9 @@ try:
     for i in range(N_PERMS):
         shuffled_ranks = df_items['rank_position'].values.copy()
         for _, idx in group_indices.items():
-            rng.shuffle(shuffled_ranks[idx])
+            sub = shuffled_ranks[idx].copy()
+            rng.shuffle(sub)
+            shuffled_ranks[idx] = sub
         max_r = np.ones(len(shuffled_ranks))
         for _, idx in group_indices.items():
             mr = shuffled_ranks[idx].max()
@@ -265,9 +267,26 @@ try:
 
     log.info(f'Cart ratio: {cart_ratio:.3f}, Purchase ratio: {purch_ratio:.3f}')
 
-    conclusion3 = (f'Coveo purchase ratio = {purch_ratio:.3f} (>= 1): early items are MORE likely '
-                   f'purchased. No wedge present. This is consistent with the model prediction '
-                   f'that high-rho platforms show no attention-value wedge.')
+    # Also pull the formal regression coefficient from coveo_regression_results.csv
+    purchase_coef = np.nan
+    purchase_pval = np.nan
+    coveo_reg_path = os.path.join(RESULTS, 'coveo_regression_results.csv')
+    if os.path.exists(coveo_reg_path):
+        coveo_reg = pd.read_csv(coveo_reg_path)
+        purch_rows = coveo_reg[coveo_reg['outcome'] == 'was_purchased']
+        ee_rows = purch_rows[purch_rows['specification'].str.contains('EarlyExposure', na=False)]
+        if len(ee_rows) > 0:
+            purchase_coef = ee_rows.iloc[0].get('coef_early_exposure', np.nan)
+            purchase_pval = ee_rows.iloc[0].get('pval_early_exposure', np.nan)
+            log.info(f'Coveo Purchase ~ EarlyExposure: coef={purchase_coef:.6f}, p={purchase_pval:.2e}')
+
+    if purch_ratio >= 1.0:
+        conclusion3 = (f'Coveo purchase ratio = {purch_ratio:.3f} (>= 1): early items are MORE likely '
+                       f'purchased. No wedge present. This is consistent with the model prediction '
+                       f'that high-rho platforms show no attention-value wedge.')
+    else:
+        conclusion3 = (f'Coveo purchase ratio = {purch_ratio:.3f} (< 1): some wedge may exist. '
+                       f'Unexpected under high-rho assumption.')
     log.info(f'Conclusion: {conclusion3}')
 
     all_results.append({
@@ -279,6 +298,8 @@ try:
         'purch_rate_early': purch_rate_early,
         'purch_rate_late': purch_rate_late,
         'purchase_ratio': purch_ratio,
+        'purchase_coef': purchase_coef,
+        'purchase_pval': purchase_pval,
         'conclusion': conclusion3,
     })
 
