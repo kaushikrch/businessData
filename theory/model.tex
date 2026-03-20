@@ -62,20 +62,7 @@ The consumer's attention satisfies the budget constraint:
 \end{equation}
 \end{assumption}
 
-Attending to a product at rank $r$ incurs a rank-dependent cost. Products ranked higher (smaller $r$) are more salient---they appear earlier in the page, require less scrolling, and benefit from visual prominence. This is captured by:
-
-\begin{assumption}[Rank-Mediated Attention Cost]\label{a:cost}
-The cost of allocating one unit of attention to the product at rank $r$ is
-\begin{equation}\label{eq:cost}
-    c(r) = c_0 + \gamma \cdot r, \qquad c_0 > 0, \; \gamma > 0.
-\end{equation}
-\end{assumption}
-
-The consumer allocates attention to maximize the expected value of the session. The consumer's problem is:
-\begin{equation}\label{eq:consumer_problem}
-    \max_{\{m_j\}_{j=1}^{J}} \; \mathbb{E}\!\left[\max_{j \in \mathcal{S}(\mathbf{m})} u_j\right] - \sum_{j=1}^{J} c(r_j) \cdot m_j \qquad \text{s.t.} \quad \sum_{j=1}^{J} m_j \leq A, \quad m_j \in [0,1],
-\end{equation}
-where $r_j = \sigma(j)$ is the rank assigned to product $j$, $u_j$ is the consumer's realized utility from purchasing product $j$ (defined in Section~\ref{sec:purchase}), and $\mathcal{S}(\mathbf{m})$ is the \emph{consideration set}---the set of products that receive sufficient attention.
+Products ranked higher (smaller $r$) are more salient---they appear earlier in the page, require less scrolling, and benefit from visual prominence. Rather than modeling this as an additive cost, we incorporate positional salience directly into the consideration production function below.
 
 \begin{definition}[Consideration Production Function]\label{def:consideration}
 Product $j$ enters the consideration set with probability
@@ -359,7 +346,7 @@ Set $A = \infty$ (no attention budget constraint). Then the consumer considers a
 
 \paragraph{Attention Budget.} The finite budget $A$ is the key departure from standard search models. In Weitzman (1979), the consumer can search any number of products at a fixed per-search cost. Our model adds the constraint that total attention is bounded, creating competition among products for cognitive resources. This is motivated by the empirical regularity that online sessions have finite duration and consumers inspect a bounded number of products.
 
-\paragraph{Rank-Mediated Costs.} The linear cost $c(r) = c_0 + \gamma r$ is a tractable parametric form. The key qualitative property is monotonicity: higher-ranked products are cheaper to attend to. This nests the standard position-bias literature (Ursu, 2018; Agarwal et al., 2019) as the special case where the budget is non-binding ($A$ large).
+\paragraph{Positional Salience.} The multiplicative salience function $b(r) = (J/r)^\beta$ captures the empirical regularity that higher-ranked products are more visually prominent. This nests the standard position-bias literature (Ursu, 2018; Agarwal et al., 2019) as the special case where the budget is non-binding ($A$ large) and $\beta$ captures the full position effect.
 
 \paragraph{Two-Stage Filter.} The distinction between click (Stage 2) and purchase (Stage 3) mirrors the empirical structure of e-commerce data, where we observe both click/view events and transaction events. The critical assumption is that rank enters clicks but not purchases---this is the source of the wedge.
 
