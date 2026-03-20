@@ -109,7 +109,64 @@ The key novel object is **W(J, ρ, A)**: the wedge as an endogenous, closed-form
 9. **Structural Estimation** (if targeting Marketing Science/QME)
 10. **Conclusion**
 
-## 5. Risk Assessment
+## 5. New Empirical Results (March 20, 2026)
+
+### 5.1 Diginetica Item Fixed Effects (Script: `09_diginetica_item_fe.py`)
+
+**Design:** The same product appears at different rank positions across different search queries. Within-item demeaning absorbs time-invariant product quality q_j, isolating the pure positional effect.
+
+**Sample:** 3.53M item-position observations, 37,633 items with ≥5 query appearances. Mean rank standard deviation within item: 2.53 positions. Mean rank range: 8.0 positions.
+
+**Key Results:**
+
+| Specification | Coefficient | SE | p-value | Interpretation |
+|--------------|------------|-----|---------|----------------|
+| Click ~ rank_position (item FE) | **-0.000766*** | 0.000032 | ≈0 | Each rank position reduces click prob by 0.077pp |
+| Purchase ~ rank_position (item FE) | +0.000007 | 0.000004 | 0.110 | **Zero effect** on purchases |
+| Click ~ early_exposure (item FE) | **+0.005308*** | 0.000466 | ≈0 | Top quartile: +0.53pp click advantage |
+| Purchase ~ early_exposure (item FE) | -0.000071 | 0.000059 | 0.231 | **Zero effect** on purchases |
+| Click ~ top5 (item FE) | **+0.010503*** | 0.000583 | ≈0 | Top 5: +1.05pp click advantage |
+| Purchase ~ top5 (item FE) | -0.000056 | 0.000081 | 0.490 | **Zero effect** on purchases |
+| Purchase\|Click ~ early_exposure (item FE) | **-0.004091*** | 0.002047 | 0.046 | Early-clicked items convert 0.41pp *worse* |
+
+**Comparison to no-FE baseline:** The click coefficient is *larger* with item FE (-0.000766 vs. -0.000502 without FE), suggesting quality sorting actually *understates* the positional effect. The purchase coefficient remains zero in both specifications.
+
+**Assessment:** This is the paper's strongest causal evidence. Holding product quality fixed, rank shifts attention dramatically but has zero effect on purchases. The wedge is driven by positional salience, not quality sorting. **Proposition 2 (calibration) strongly supported.**
+
+### 5.2 REES46 Within-Session Attention Externality (Script: `10_rees46_externality.py`)
+
+**Design:** Tests whether acting on item j (carting it) affects engagement with subsequent items in the session.
+
+**Sample:** 5.21M item-position observations across 744,693 sessions with ≥3 items.
+
+**Results:**
+
+| Test | Specification | Coefficient | p-value | Direction |
+|------|--------------|------------|---------|-----------|
+| Cart spillover | was_carted ~ any_cart_before | **+0.535*** | ≈0 | Positive (unexpected) |
+| Cart spillover | was_purchased ~ any_cart_before | **+0.261*** | ≈0 | Positive (unexpected) |
+| Saturation | was_carted ~ cum_carts_before | **+0.091*** | ≈0 | Positive |
+| Early commitment | 2nd-half cart ~ early_cart_in_session | **+0.488*** | ≈0 | Positive |
+
+**Interpretation:** The positive coefficients reflect **session-level selection**, not the attention externality predicted by Proposition 4. Users who cart one item are high-intent shoppers who cart/purchase many items in the same session. The between-session heterogeneity (high-intent vs. low-intent) dominates the within-session rivalry effect.
+
+**Heterogeneity confirms selection:** Short sessions show even larger positive spillovers (72pp cart diff) than long sessions (35pp), consistent with high-intent users having concentrated shopping behavior.
+
+**Assessment:** The current test does **not** identify the attention externality because it confounds within-session rivalry with between-session heterogeneity. **Proposition 4 requires session fixed effects or an instrumental variable design** — e.g., exploiting exogenous variation in whether a specific product is carted (perhaps from price shocks or stock-out events). This is a genuine empirical limitation. Reclassified from "Medium testability" to "Low testability with current data."
+
+### 5.3 Updated Proposition Testability
+
+| Proposition | Previous Rating | New Rating | Change Reason |
+|------------|----------------|------------|---------------|
+| P1 (Overload) | High | **High** | Unchanged |
+| P2 (Calibration) | High | **Very High** | Item FE results confirm wedge survives quality controls |
+| P3 (Interaction) | Medium | **Medium** | Unchanged |
+| P4 (Externality) | Medium | **Low** | Selection confound in REES46; needs session FE or IV |
+| P5 (Welfare Gap) | Low-Medium | **Low-Medium** | Unchanged |
+| P6 (Expertise) | High | **High** | Unchanged |
+| P7 (U-Shape) | High | **High** | Unchanged |
+
+## 6. Risk Assessment
 
 | Risk | Probability | Impact | Mitigation |
 |------|------------|--------|-----------|
@@ -130,10 +187,12 @@ The project has:
 
 **Recommended next steps:**
 1. Finalize model.tex proofs (convert proof sketches to full proofs)
-2. Run item fixed effects specifications on Diginetica
-3. Test within-session attention externality (Proposition 4)
-4. Draft paper targeting Marketing Science submission
+2. ~~Run item fixed effects specifications on Diginetica~~ **DONE** — wedge confirmed with item FE
+3. ~~Test within-session attention externality (Proposition 4)~~ **DONE** — selection confound identified; needs redesign
+4. Redesign Proposition 4 test with session fixed effects or IV approach
+5. Run pagination RD on Diginetica (page 1 vs. page 2 boundary)
+6. Draft paper targeting Marketing Science submission
 
 ---
-*Assessment date: 2026-03-20*
-*Based on: 22-paper literature collection, 4 analyzed datasets, formal theoretical model*
+*Assessment date: 2026-03-20 (updated with item FE and externality results)*
+*Based on: 22-paper literature collection, 4 analyzed datasets, formal theoretical model, 2 additional empirical analyses*

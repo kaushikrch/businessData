@@ -1,0 +1,93 @@
+[13:48:15] Loading REES46 processed data...
+[13:48:16]   Loaded /home/user/businessData/data_raw/rees46/shard_0.parquet: 3,670,000 rows
+[13:48:17]   Loaded /home/user/businessData/data_raw/rees46/shard_1.parquet: 3,670,000 rows
+[13:48:18] Total raw events: 7,340,000
+[13:48:18] Columns: ['event_time', 'event_type', 'product_id', 'category_id', 'category_code', 'brand', 'price', 'user_id', 'user_session']
+[13:48:18] Event types: {'view': 7136240, 'purchase': 110471, 'cart': 93289}
+[13:48:18] 
+Building within-session ordered dataset...
+[13:48:34] Views in sessions with >= 3 items: 5,957,645
+[13:48:35] Sessions: 744,693
+[13:48:39] Cart rate: 0.0213
+[13:48:39] Purchase rate: 0.0336
+[13:48:39] 
+Constructing attention externality variables...
+[13:48:42] Items with any_cart_before=1: 0.029
+[13:48:42] Items with any_purchase_before=1: 0.041
+[13:48:42] 
+============================================================
+[13:48:42] TEST 1: CART SPILLOVER (Proposition 4)
+[13:48:42] ============================================================
+[13:48:42] Does carting an earlier item reduce cart/purchase probability of later items?
+[13:48:44] 
+Items at position 2+: 5,212,952
+[13:48:44]   With prior cart: 170,096
+[13:48:44]   Without prior cart: 5,042,856
+[13:48:44] 
+  was_carted rate:
+[13:48:44]     After prior cart:  0.5389
+[13:48:44]     Before any cart:   0.0037
+[13:48:44]     Difference:        53.520 pp
+[13:48:44] 
+  was_purchased rate:
+[13:48:44]     After prior cart:  0.2887
+[13:48:44]     Before any cart:   0.0252
+[13:48:44]     Difference:        26.345 pp
+[13:48:44] 
+Regression: Cart/Purchase ~ any_cart_before + controls
+[13:48:45] 
+  was_carted ~ any_cart_before:
+[13:48:45]     Coefficient: 0.535225 (SE=0.001199, p=0.0000) ***
+[13:48:45]     norm_position: -0.006504
+[13:48:45]     N=5,212,952, R²=0.4414
+[13:48:47] 
+  was_purchased ~ any_cart_before:
+[13:48:47]     Coefficient: 0.260725 (SE=0.001089, p=0.0000) ***
+[13:48:47]     norm_position: 0.024305
+[13:48:47]     N=5,212,952, R²=0.0762
+[13:48:47] 
+============================================================
+[13:48:47] TEST 2: ATTENTION SATURATION
+[13:48:47] ============================================================
+[13:48:47] Does cumulative engagement (# carts so far) reduce later conversion?
+[13:48:48] 
+  was_carted ~ cum_carts_before:
+[13:48:48]     Coefficient: 0.091219 (SE=0.000553, p=0.0000) ***
+[13:48:48]     Interpretation: Each additional prior cart changes was_carted by 9.122 pp
+[13:48:50] 
+  was_purchased ~ cum_carts_before:
+[13:48:50]     Coefficient: 0.046038 (SE=0.000332, p=0.0000) ***
+[13:48:50]     Interpretation: Each additional prior cart changes was_purchased by 4.604 pp
+[13:48:50] 
+============================================================
+[13:48:50] TEST 3: SESSION-LEVEL EARLY COMMITMENT
+[13:48:50] ============================================================
+[13:48:50] Do sessions with early carts (first half) have lower late-session conversion?
+[13:48:53] 
+Second-half items: 2,765,857
+[13:48:53] Sessions with early cart: 0.035
+[13:48:54] 
+  Second-half was_carted rate:
+[13:48:54]     Sessions with early cart:    0.4955
+[13:48:54]     Sessions without early cart: 0.0066
+[13:48:54]     Difference: 48.886 pp
+[13:48:54]     Regression: 0.488245 (SE=0.001603, p=0.0000) ***
+[13:48:54] 
+  Second-half was_purchased rate:
+[13:48:54]     Sessions with early cart:    0.2986
+[13:48:54]     Sessions without early cart: 0.0318
+[13:48:54]     Difference: 26.681 pp
+[13:48:55]     Regression: 0.265719 (SE=0.001465, p=0.0000) ***
+[13:48:55] 
+============================================================
+[13:48:55] HETEROGENEITY: EXTERNALITY BY SESSION LENGTH
+[13:48:55] ============================================================
+[13:48:55] Median session length: 10.0
+[13:48:56] 
+Short sessions (N=2,424,935):
+[13:48:56]   was_carted: after_cart=0.7280, before_cart=0.0057, diff=72.226pp
+[13:48:56]   was_purchased: after_cart=0.4072, before_cart=0.0363, diff=37.087pp
+[13:48:58] 
+Long sessions (N=2,788,017):
+[13:48:58]   was_carted: after_cart=0.3538, before_cart=0.0019, diff=35.197pp
+[13:48:59]   was_purchased: after_cart=0.1727, before_cart=0.0156, diff=15.712pp
