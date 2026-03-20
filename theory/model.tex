@@ -1,0 +1,426 @@
+% model.tex — Attention Budget Competition and the Attention-Value Wedge
+% Core model for "Attention Budget Competition and the Attention-Value Wedge in Online Retail"
+
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+
+\title{Attention Budget Competition and the Attention--Value Wedge\\in Online Product Search}
+\author{Working Draft}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Model}\label{sec:model}
+
+\subsection{Economic Environment}\label{sec:environment}
+
+A consumer interacts with a digital retail platform during a single session. The platform displays $J \geq 2$ products in a ranked list. Each product $j \in \{1, \dots, J\}$ has latent match quality $q_j$, capturing how well the product fits the consumer's needs.
+
+\begin{assumption}[Quality Distribution]\label{a:quality}
+Match qualities $\{q_j\}_{j=1}^{J}$ are drawn i.i.d.\ from a distribution $G$ with density $g$ on $\mathbb{R}$, with finite mean $\mu_q$ and variance $\sigma_q^2$. The density $g$ is log-concave.
+\end{assumption}
+
+The platform observes a noisy signal of each product's quality:
+\begin{equation}\label{eq:signal}
+    z_j = q_j + \sigma_\eta \cdot \eta_j, \qquad \eta_j \sim N(0,1) \text{ i.i.d.},
+\end{equation}
+where $\sigma_\eta \geq 0$ governs signal noise. The platform ranks products in descending order of $z_j$: the product with the highest signal receives rank $r = 1$, the second-highest receives rank $r = 2$, and so on. Let $\sigma: \{1,\dots,J\} \to \{1,\dots,J\}$ denote the resulting assignment of products to ranks.
+
+\begin{definition}[Ranking Calibration]\label{def:calibration}
+The \emph{ranking calibration} of the platform is
+\begin{equation}\label{eq:calibration}
+    \rho \;=\; \mathrm{Corr}(z_j, q_j) \;=\; \frac{\sigma_q}{\sqrt{\sigma_q^2 + \sigma_\eta^2}} \;\in\; [0, 1].
+\end{equation}
+When $\rho = 1$ ($\sigma_\eta = 0$), the platform perfectly sorts products by quality. When $\rho \to 0$ ($\sigma_\eta \to \infty$), rankings are uninformative about quality.
+\end{definition}
+
+\begin{remark}
+The platform controls rankings; the consumer controls attention allocation \emph{within} the ranked list. This separation is central: the platform's design problem is to choose the ranking function, while the consumer's problem is to allocate scarce cognitive resources given the ranking.
+\end{remark}
+
+\subsection{Stage 1: Attention Allocation}\label{sec:attention}
+
+The consumer has a finite attention budget $A > 0$, representing total cognitive resources available for the session. Let $m_j \in [0,1]$ denote the attention allocated to product $j$.
+
+\begin{assumption}[Attention Budget]\label{a:budget}
+The consumer's attention satisfies the budget constraint:
+\begin{equation}\label{eq:budget}
+    \sum_{j=1}^{J} m_j \leq A.
+\end{equation}
+\end{assumption}
+
+Attending to a product at rank $r$ incurs a rank-dependent cost. Products ranked higher (smaller $r$) are more salient---they appear earlier in the page, require less scrolling, and benefit from visual prominence. This is captured by:
+
+\begin{assumption}[Rank-Mediated Attention Cost]\label{a:cost}
+The cost of allocating one unit of attention to the product at rank $r$ is
+\begin{equation}\label{eq:cost}
+    c(r) = c_0 + \gamma \cdot r, \qquad c_0 > 0, \; \gamma > 0.
+\end{equation}
+\end{assumption}
+
+The consumer allocates attention to maximize the expected value of the session. The consumer's problem is:
+\begin{equation}\label{eq:consumer_problem}
+    \max_{\{m_j\}_{j=1}^{J}} \; \mathbb{E}\!\left[\max_{j \in \mathcal{S}(\mathbf{m})} u_j\right] - \sum_{j=1}^{J} c(r_j) \cdot m_j \qquad \text{s.t.} \quad \sum_{j=1}^{J} m_j \leq A, \quad m_j \in [0,1],
+\end{equation}
+where $r_j = \sigma(j)$ is the rank assigned to product $j$, $u_j$ is the consumer's realized utility from purchasing product $j$ (defined in Section~\ref{sec:purchase}), and $\mathcal{S}(\mathbf{m})$ is the \emph{consideration set}---the set of products that receive sufficient attention.
+
+\begin{definition}[Consideration Production Function]\label{def:consideration}
+Product $j$ enters the consideration set with probability
+\begin{equation}\label{eq:consideration}
+    \varphi(m_j) = 1 - \exp(-\lambda \cdot m_j), \qquad \lambda > 0,
+\end{equation}
+where $\lambda$ is the \emph{attention productivity} parameter. This function satisfies: (i) $\varphi(0) = 0$, (ii) $\varphi$ is strictly increasing, (iii) $\varphi$ is strictly concave, and (iv) $\lim_{m \to \infty}\varphi(m) = 1$. Products are included in the consideration set $\mathcal{S}(\mathbf{m})$ independently.
+\end{definition}
+
+\begin{remark}
+The concavity of $\varphi$ is the engine of the wedge: diminishing returns to attention on any single product means the consumer spreads attention across products, but the budget constraint ensures that when $J$ is large, each product's consideration probability is low.
+\end{remark}
+
+\begin{assumption}[Positional Salience]\label{a:salience}
+The rank $r$ of a product amplifies the productivity of attention via a salience multiplier:
+\begin{equation}\label{eq:salience}
+    b(r) = \left(\frac{J}{r}\right)^{\!\beta}, \qquad \beta \geq 0,
+\end{equation}
+so that the effective consideration probability is $\varphi_j(m_j) = 1 - \exp(-\lambda \cdot b(r_j) \cdot m_j)$. When $\beta = 0$, there is no positional effect. When $\beta > 0$, higher-ranked products benefit from greater visual prominence.
+\end{assumption}
+
+The consumer solves:
+\begin{equation}\label{eq:consumer_problem_full}
+    \max_{\{m_j\}_{j=1}^{J}} \; \mathbb{E}\!\left[\max_{j \in \mathcal{S}(\mathbf{m})} q_j\right] \qquad \text{s.t.} \quad \sum_{j=1}^{J} m_j = A, \quad m_j \geq 0.
+\end{equation}
+
+\begin{lemma}[Optimal Attention Allocation]\label{lem:attention}
+Under the small-$\varphi$ approximation (valid when $A/J$ is small), the first-order conditions yield:
+\begin{equation}\label{eq:foc}
+    \lambda \cdot b(r_j) \cdot \exp(-\lambda \cdot b(r_j) \cdot m_j) \cdot \mathbb{E}[q_j \mid r_j] = \mu \quad \text{for all } j \text{ with } m_j > 0,
+\end{equation}
+where $\mu > 0$ is the shadow price of the budget constraint. Solving:
+\begin{equation}\label{eq:optimal_attention}
+    m_j^* = \frac{1}{\lambda \cdot b(r_j)} \max\!\Big\{\ln\!\big(b(r_j) \cdot \mathbb{E}[q_j \mid r_j]\big) - \ln(\mu / \lambda),\; 0\Big\}.
+\end{equation}
+The shadow price $\mu$ satisfies $\sum_j m_j^* = A$.
+\end{lemma}
+
+\begin{proof}[Proof Sketch]
+When consideration probabilities are small, $P(|\mathcal{S}| \geq 2)$ is second-order. The objective is approximately $\sum_j \varphi_j(m_j) \cdot \mathbb{E}[q_j \mid r_j]$. The Lagrangian with multiplier $\mu$ yields \eqref{eq:foc}. The log-proportional form follows from the exponential $\varphi$. The shadow price $\mu$ is pinned by the budget constraint.
+\end{proof}
+
+\begin{remark}[Interpretation]
+Equation~\eqref{eq:optimal_attention} is a \emph{log-proportional} rule: products with higher expected quality (as inferred from rank) receive more attention, but the allocation is compressed by the logarithm. Products below a threshold expected quality receive zero attention. The positional salience $b(r_j)$ amplifies both the benefit and the effective ``price'' of attention, creating an advantage for high-ranked products that may exceed their quality advantage when $\rho < 1$.
+\end{remark}
+
+\begin{definition}[Endogenous Consideration Set Size]\label{def:consideration_size}
+The expected number of products in the consideration set is:
+\begin{equation}\label{eq:J_star}
+    J^*(A, \rho) = \sum_{j=1}^{J} \varphi_j(m_j^*).
+\end{equation}
+This is decreasing in $J$ (for fixed $A$) and increasing in $A$.
+\end{definition}
+
+\subsection{Stage 2: Click (Inspection)}\label{sec:click}
+
+A product that enters the consideration set is \emph{clicked} (inspected in detail). The unconditional click probability for product $j$ is thus:
+\begin{equation}\label{eq:click}
+    P(\text{click } j) = \varphi_j(m_j^*) = 1 - \exp\!\big(-\lambda \cdot b(r_j) \cdot m_j^*\big).
+\end{equation}
+
+\begin{remark}
+Ranking affects clicks through two channels: (i) the \emph{informational channel}---higher rank implies higher $\mathbb{E}[q_j \mid r_j]$, leading to more attention $m_j^*$; and (ii) the \emph{positional channel}---higher rank amplifies attention productivity via $b(r_j)$. When $\rho < 1$, these channels can misallocate attention to low-quality products that happen to occupy high ranks.
+\end{remark}
+
+\subsection{Stage 3: Purchase (Evaluation)}\label{sec:purchase}
+
+After clicking on product $j$, the consumer observes a post-click evaluation signal:
+\begin{equation}\label{eq:post_click}
+    u_j^P = q_j + \varepsilon_j,
+\end{equation}
+where $\varepsilon_j$ is a mean-zero evaluation shock with CDF $H$, independent of the pre-click process.
+
+\begin{assumption}[Purchase Independence from Rank]\label{a:purchase}
+The consumer purchases product $j$ if and only if
+\begin{equation}\label{eq:purchase_rule}
+    u_j^P \geq 0 \qquad \Longleftrightarrow \qquad q_j + \varepsilon_j \geq 0.
+\end{equation}
+Conditional on clicking, the purchase decision depends only on match quality $q_j$ and the evaluation shock $\varepsilon_j$. It does not depend on the product's rank $r_j$ or the attention $m_j^*$ allocated to it.
+\end{assumption}
+
+The conditional purchase probability given click is:
+\begin{equation}\label{eq:purchase_prob}
+    B(q_j) \;=\; P(\text{purchase} \mid \text{click}, q_j) \;=\; 1 - H(-q_j).
+\end{equation}
+
+\begin{assumption}[Non-Degenerate Purchase]\label{a:nondegen}
+For all $q$ in the support of $G$: $0 < B(q) < 1$.
+\end{assumption}
+
+\subsection{The Attention--Value Wedge}\label{sec:wedge}
+
+\begin{definition}[Attention Share and Value Share]\label{def:shares}
+The \emph{attention share} of product $j$ is its fraction of total consideration probability:
+\begin{equation}\label{eq:attention_share}
+    \alpha_j = \frac{\varphi_j(m_j^*)}{\sum_{k=1}^{J} \varphi_k(m_k^*)}.
+\end{equation}
+The \emph{value share} of product $j$ is its expected quality contribution:
+\begin{equation}\label{eq:value_share}
+    v_j = \frac{q_j \cdot P(j \text{ purchased})}{\sum_{k=1}^{J} q_k \cdot P(k \text{ purchased})}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Product-Level Wedge]\label{def:product_wedge}
+The \emph{attention--value wedge} for product $j$ is:
+\begin{equation}\label{eq:product_wedge}
+    W_j \;=\; \alpha_j - v_j.
+\end{equation}
+If $W_j > 0$, product $j$ receives more attention than its value justifies. If $W_j < 0$, it is a ``diamond in the rough.''
+\end{definition}
+
+\begin{definition}[Aggregate Platform Wedge]\label{def:platform_wedge}
+The \emph{aggregate wedge} is the total-variation distance between the attention and value distributions:
+\begin{equation}\label{eq:platform_wedge}
+    \mathcal{W}(J, \rho, A) \;=\; \frac{1}{2}\sum_{j=1}^{J} |\alpha_j - v_j|.
+\end{equation}
+This takes values in $[0, 1]$, with $\mathcal{W} = 0$ when attention perfectly tracks value and $\mathcal{W} = 1$ when they are maximally misaligned.
+\end{definition}
+
+\begin{remark}
+The wedge $\mathcal{W}(J, \rho, A)$ is a function of three primitives: the assortment size $J$, the ranking calibration $\rho$, and the attention budget $A$. Making the wedge an endogenous function of observables---rather than a structural parameter as in Compiani et al.\ (2024)---is the central contribution.
+\end{remark}
+
+\subsection{Timing}\label{sec:timing}
+
+The timing of the model is as follows:
+\begin{enumerate}
+    \item \textbf{Nature} draws qualities $\{q_j\}$ and signals $\{z_j\}$.
+    \item \textbf{Platform} assigns rankings based on $\{z_j\}$.
+    \item \textbf{Consumer} observes the ranked list and allocates attention $\{m_j^*\}$ subject to budget $A$.
+    \item \textbf{Consumer} clicks on products in the consideration set $\mathcal{S}$ with probability \eqref{eq:click}.
+    \item \textbf{Consumer} evaluates clicked products and purchases those passing threshold \eqref{eq:purchase_rule}.
+\end{enumerate}
+
+\section{Propositions}\label{sec:propositions}
+
+\begin{proposition}[Attention Overload]\label{prop:overload}
+For fixed $A$ and $\rho < 1$:
+\begin{equation}
+    \frac{\partial \mathcal{W}}{\partial J} > 0.
+\end{equation}
+As the assortment grows, the wedge between attention allocation and value contribution widens.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+When $J$ increases with $A$ fixed, the per-product attention $m_j^* \sim A/J$ falls. By concavity of $\varphi$, the consideration probability $\varphi_j(A/J) \approx \lambda A/J$ is approximately linear for small $A/J$. The attention share of a rank-$r$ product is proportional to $b(r) \cdot \mathbb{E}[q \mid r]$, while the value share depends on $q_j \cdot P(j \text{ best in } \mathcal{S})$. As $J$ grows, the positional salience term $b(r)$ dominates quality compression from more i.i.d.\ draws, so attention shares diverge from value shares. By the envelope theorem on the attention allocation problem, $\partial \mathcal{W}/\partial J > 0$.
+\end{proof}
+
+\begin{remark}[Empirical Mapping]
+Across our datasets, higher effective $J$ corresponds to larger wedges: Diginetica (top 30 search results, $\mathcal{W} = 0.234$) shows a larger wedge than REES46 (browsing sessions with moderate $J$, $\mathcal{W} = 0.140$). Coveo's browsing sessions have low effective $J$ (median $\sim 2$ items per session) and show no wedge.
+\end{remark}
+
+\begin{proposition}[Ranking Calibration]\label{prop:calibration}
+For fixed $A$ and $J$:
+\begin{equation}
+    \frac{\partial \mathcal{W}}{\partial \rho} < 0.
+\end{equation}
+Better-calibrated rankings reduce the wedge.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+At $\rho = 1$, the rank order equals the quality order. The positional salience $b(r)$ boosts exactly the highest-quality products, so $\alpha_j$ and $v_j$ are co-monotone, minimizing total variation. As $\rho$ decreases, the rank order becomes a noisier permutation of the quality order. By a coupling argument, the expected total variation between $\alpha$ and $v$ increases monotonically in the degree of rank--quality misalignment.
+\end{proof}
+
+\begin{remark}[Empirical Mapping]
+Coveo (high $\rho$, optimized recommendation engine) shows no wedge in browsing data. REES46 and Diginetica (lower $\rho$, weaker ranking calibration) show the wedge. This cross-platform variation is the cleanest test of Proposition~\ref{prop:calibration}.
+\end{remark}
+
+\begin{proposition}[Overload--Calibration Interaction]\label{prop:interaction}
+The cross-partial derivative satisfies:
+\begin{equation}
+    \frac{\partial^2 \mathcal{W}}{\partial J \,\partial \rho} < 0.
+\end{equation}
+The marginal effect of assortment size on the wedge is larger when ranking calibration is lower. Equivalently, the marginal benefit of better calibration is larger when the assortment is large.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+In the small-$\varphi$ regime (large $J$), attention allocation is approximately proportional to $b(r) \cdot \mathbb{E}[q \mid r]$. Decompose $\mathcal{W}$ into a ``positional misallocation'' component (variance of $b(r)$ around the efficient allocation, increasing in $J$) and a ``quality estimation'' component (variance of $\mathbb{E}[q \mid r]$ around true $q$, increasing in $1/\rho$). The cross-term is the covariance of these two sources of misallocation, which is positive. By supermodularity of $\mathcal{W}$ in $(J, 1/\rho)$, the interaction is negative in $(J, \rho)$.
+\end{proof}
+
+\begin{proposition}[Attention Externality]\label{prop:externality}
+Promoting product $j$ (increasing $b(r_j)$) reduces the equilibrium consideration probability of every other product:
+\begin{equation}
+    \frac{\partial \varphi_k(m_k^*)}{\partial b(r_j)} \leq 0 \quad \text{for all } k \neq j, \quad \text{with strict inequality for } k \text{ with } m_k^* > 0.
+\end{equation}
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+From the first-order condition~\eqref{eq:foc}, when $b(r_j)$ increases, $m_j^*$ increases. The budget constraint $\sum_k m_k^* = A$ requires the shadow price $\mu$ to increase. This reduces $m_k^*$ for all other products with positive attention, and hence $\varphi_k$ decreases.
+
+The magnitude of the externality is:
+\[
+    \frac{\partial \varphi_k}{\partial b(r_j)} = -\varphi_k'(m_k^*) \cdot \frac{\partial m_k^*}{\partial \mu} \cdot \frac{\partial \mu}{\partial b(r_j)},
+\]
+which is larger when (i) $A$ is smaller, (ii) $J$ is larger, and (iii) product $k$ is near the attention threshold.
+\end{proof}
+
+\begin{proposition}[Consumer Surplus Gap]\label{prop:welfare}
+Let $R^{\text{click}}$ maximize total clicks $\sum_j \varphi_j(m_j^*)$, and let $R^{\text{welfare}}$ maximize consumer surplus $\mathbb{E}[\max_{j \in \mathcal{S}} q_j]$. Then for all $J \geq 2$ and $\rho < 1$:
+\begin{equation}
+    CS(R^{\text{welfare}}) > CS(R^{\text{click}}),
+\end{equation}
+and the gap $CS(R^{\text{welfare}}) - CS(R^{\text{click}})$ is increasing in $J$.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+The click-maximizing ranking promotes products where $b(r) \cdot \varphi'$ is large---products with high attention elasticity, regardless of quality. The welfare-maximizing ranking promotes products where the expected quality contribution to $\max_{j \in \mathcal{S}} q_j$ is large---``diamonds in the rough'' with high quality potential but low current consideration probability. When $\rho < 1$, these diverge. The gap grows in $J$ because the best unconsidered product improves in expectation (order statistics of the quality distribution), so the welfare cost of missing it increases.
+\end{proof}
+
+\begin{proposition}[Consumer Expertise Reduces the Wedge]\label{prop:expertise}
+Let consumers be heterogeneous in expertise $\tau_c > 0$ (private-signal precision about product quality). Then:
+\begin{equation}
+    \frac{\partial \mathcal{W}}{\partial \tau_c} < 0.
+\end{equation}
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+With expertise $\tau_c$, the consumer's posterior expectation is:
+\[
+    \mathbb{E}[q_j \mid r_j, \tau_c] = \frac{\tau_c \cdot q_j^{\text{prior}} + \tau \cdot z_j}{\tau_c + \tau},
+\]
+where $q_j^{\text{prior}}$ is the consumer's private prior and $\tau$ is the platform's signal precision. When $\tau_c$ is large, attention allocation depends primarily on the consumer's own quality assessment rather than rank, reducing the positional channel's distortion and hence the wedge.
+\end{proof}
+
+\begin{remark}[Empirical Mapping]
+This maps to session-level heterogeneity: in Diginetica, text search (high expertise, $\tau_c$ large) shows no rank effect on clicks, while category browsing ($\tau_c$ small) shows the full wedge. In REES46, short sessions (high intent) show a wedge of $+0.03$pp while long sessions show $-0.87$pp purchase penalty.
+\end{remark}
+
+\begin{proposition}[Non-Monotone Attention: The U-Shape]\label{prop:ushape}
+For intermediate values of $A$ relative to $J$, when consumers have moderate private information ($\tau_c > 0$), the equilibrium consideration probability $\varphi_j(m_j^*)$ as a function of rank $r$ can be U-shaped: high for top-ranked products (positional salience), declining through middle ranks, then increasing for some low-ranked products where private information overrides the platform signal.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+The consideration probability depends on $b(r) \cdot m_j^*$. The positional channel $b(r)$ is monotonically decreasing in $r$. The informational channel $\mathbb{E}[q_j \mid r_j, \tau_c]$ is also decreasing in $r$ on average, but with variance from the consumer's private signal. For consumers with moderate expertise, the bottom of the ranking contains products the consumer privately knows are good (the platform signal was noisy). These receive a ``targeted search'' burst of attention from the private-information channel, creating the U-shape.
+\end{proof}
+
+\begin{remark}[Empirical Mapping]
+The Coveo browsing data exhibits exactly this U-shape: cart rates decline from position 1 (4.34\%) to position 4 (3.24\%), then rise from position 5 onward (reaching 4.68\% at position 14). The model explains this as the combination of positional salience (declining) and private-information-driven targeted search (increasing for later positions).
+\end{remark}
+
+\section{Platform Optimization}\label{sec:platform}
+
+The platform chooses a ranking (permutation) $\pi: \{1,\dots,J\} \to \{1,\dots,J\}$ to assign ranks to products. Product $j$ receives rank $\pi(j)$.
+
+\subsection{Welfare-Maximizing vs.\ Click-Maximizing Rankings}
+
+The \emph{welfare-maximizing ranking} assigns ranks by a composite index:
+\begin{equation}\label{eq:welfare_index}
+    z_j^{\text{welfare}} = \mathbb{E}[q_j \mid z_j] + \delta_j^{\text{welfare}},
+\end{equation}
+where $\delta_j^{\text{welfare}} > 0$ is a ``consideration correction'' that is larger for products with high quality variance---products whose quality potential exceeds their expected signal. This correction pushes up likely-underconsidered products.
+
+The \emph{click-maximizing ranking} assigns ranks by:
+\begin{equation}\label{eq:click_index}
+    z_j^{\text{click}} = \varphi'(m_j^*) \cdot b'(r_j) \cdot m_j^*,
+\end{equation}
+which is purely about attention productivity---promoting products where a rank boost generates the most additional clicks, insensitive to $q_j$.
+
+\begin{corollary}[Welfare Loss Characterization]\label{cor:welfare_loss}
+The welfare loss from click-maximizing (relative to welfare-maximizing) scales as:
+\begin{equation}\label{eq:welfare_loss}
+    \mathcal{L}(J, \rho) = CS(R^{\text{welfare}}) - CS(R^{\text{click}}) \sim \mathcal{O}\!\left(J^{1-\gamma} \cdot (1 - \rho)\right),
+\end{equation}
+where $\gamma \in [0, 1)$ governs how the attention budget scales with $J$ (i.e., $A = A_0 \cdot J^{\gamma}$). This grows in $J$ and in $1 - \rho$.
+\end{corollary}
+
+\section{Nesting Existing Models}\label{sec:nesting}
+
+The framework nests three canonical models as special cases.
+
+\paragraph{Weitzman (1979).}
+Set $\beta = 0$ (no positional salience), $A = K/\lambda$ for integer $K$, and restrict attention to $m_j \in \{0, 1/\lambda\}$. Then $\varphi(1/\lambda) = 1 - e^{-1}$ is a fixed probability of ``opening the box.'' The consumer's problem reduces to choosing which $K$ out of $J$ boxes to open---equivalent to Weitzman's sequential search with reservation utilities when products are inspected in rank order.
+
+\paragraph{Cattaneo et al.\ (2023).}
+Set $b(r) = 1$ for all $r$ (no ranking effect) and ignore the purchase stage. The model reduces to: consumer allocates $A$ attention units across $J$ products, each entering consideration with probability $\varphi(m_j)$. The attention overload result ($\varphi_j$ decreasing in $J$ for each $j$) follows from the budget constraint. This microfounds the Cattaneo et al.\ attention overload axiom.
+
+\paragraph{Compiani et al.\ (2024).}
+Set $A = \infty$ (no attention budget constraint). Then the consumer considers all products, and the remaining structure maps to their search index $s_j \leftrightarrow \varphi_j$ and utility index $u_j \leftrightarrow q_j$. Our model generalizes theirs by making $s_j$ endogenous---a function of $(J, \rho, A)$ rather than a reduced-form parameter---and producing comparative statics in $J$ that their model cannot generate.
+
+\section{Discussion of Assumptions}\label{sec:assumptions_discussion}
+
+\paragraph{Attention Budget.} The finite budget $A$ is the key departure from standard search models. In Weitzman (1979), the consumer can search any number of products at a fixed per-search cost. Our model adds the constraint that total attention is bounded, creating competition among products for cognitive resources. This is motivated by the empirical regularity that online sessions have finite duration and consumers inspect a bounded number of products.
+
+\paragraph{Rank-Mediated Costs.} The linear cost $c(r) = c_0 + \gamma r$ is a tractable parametric form. The key qualitative property is monotonicity: higher-ranked products are cheaper to attend to. This nests the standard position-bias literature (Ursu, 2018; Agarwal et al., 2019) as the special case where the budget is non-binding ($A$ large).
+
+\paragraph{Two-Stage Filter.} The distinction between click (Stage 2) and purchase (Stage 3) mirrors the empirical structure of e-commerce data, where we observe both click/view events and transaction events. The critical assumption is that rank enters clicks but not purchases---this is the source of the wedge.
+
+\paragraph{Ranking Calibration.} The parameter $\rho$ captures the quality of the platform's recommendation or ranking algorithm. It allows cross-platform comparison: a platform with a sophisticated machine-learning ranker (high $\rho$) generates different predictions than one using a simple recency-based or popularity-based ranking (low $\rho$).
+
+\paragraph{Relationship to Existing Models.} See Section~\ref{sec:nesting} for formal nesting results. Additionally, our attention allocation~\eqref{eq:optimal_attention} is a product-search analogue of the Gabaix (2019) sparse max. The log-proportional allocation is the cross-product counterpart of his within-product attention weights.
+
+\section{Empirical Mapping}\label{sec:empirical_mapping}
+
+Table~\ref{tab:mapping} maps model primitives to data proxies across the four datasets analyzed in the companion empirical report.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Model Primitive} & \textbf{Data Proxy} & \textbf{Available In} \\
+\midrule
+$J$ (assortment size) & Products in search results / category & Diginetica, Coveo \\
+$\rho$ (ranking calibration) & Cross-platform variation & Coveo vs.\ Diginetica vs.\ REES46 \\
+$A$ (attention budget) & Session duration, items viewed & All four datasets \\
+$\varphi_j$ (consideration) & Click / view indicator & All four datasets \\
+$q_j$ (quality) & Purchase indicator, cond.\ conversion & REES46, Coveo \\
+$b(r)$ (positional salience) & Position--click gradient slope & Diginetica, Coveo search \\
+$\tau_c$ (consumer expertise) & Query specificity, session length & Diginetica, Coveo \\
+\bottomrule
+\end{tabular}
+\caption{Mapping model primitives to empirical proxies.}
+\label{tab:mapping}
+\end{table}
+
+\subsection{Testing Strategy by Proposition}
+
+\paragraph{Proposition~\ref{prop:overload} (Overload: $\mathcal{W}$ increases in $J$).}
+Compare wedge magnitudes across platforms/categories with different effective $J$. Diginetica ($J \approx 30$, wedge $= 0.234$) vs.\ Coveo browsing ($J \approx 2$, no wedge). Within REES46, compare high-$J$ categories (electronics, ${\sim}100$K products) vs.\ low-$J$ categories (auto, ${\sim}5$K).
+
+\paragraph{Proposition~\ref{prop:calibration} (Calibration: $\mathcal{W}$ decreases in $\rho$).}
+Cross-platform: Coveo (high $\rho$) shows no wedge; REES46 and Diginetica (lower $\rho$) show the wedge. Within Coveo: search (algorithmic, high $\rho$) vs.\ browsing (curated recommendations, different $\rho$).
+
+\paragraph{Proposition~\ref{prop:interaction} (Interaction).}
+Triple difference: (high $J$ vs.\ low $J$) $\times$ (high $\rho$ vs.\ low $\rho$) $\times$ (click vs.\ purchase). Within Diginetica, partition by result count ($J$) and search type (text $=$ high $\rho$, category browse $=$ low $\rho$).
+
+\paragraph{Proposition~\ref{prop:externality} (Attention Externality).}
+Within-session substitution: when product $j$ is clicked at position $r$, measure click probabilities for adjacent products. In REES46, test whether carting item $j$ reduces subsequent views of other items.
+
+\paragraph{Proposition~\ref{prop:welfare} (Consumer Surplus Gap).}
+Structural estimation on Diginetica (observed rankings) to compute counterfactual welfare under welfare-maximizing vs.\ observed ranking.
+
+\paragraph{Proposition~\ref{prop:expertise} (Consumer Expertise).}
+Session-level heterogeneity: short sessions (high $\tau_c$) vs.\ long sessions (low $\tau_c$). Diginetica text search (high $\tau_c$) vs.\ category browse (low $\tau_c$).
+
+\paragraph{Proposition~\ref{prop:ushape} (U-Shape).}
+Coveo browsing position gradient: test whether the U-shape in cart rates survives item fixed effects across sessions.
+
+\subsection{Identification Strategy}
+
+Three approaches address the endogeneity of rank and quality:
+\begin{enumerate}
+    \item \textbf{Cross-platform variation in $\rho$:} Platforms with different ranking quality provide identification of the calibration effect (Proposition~\ref{prop:calibration}).
+    \item \textbf{Within-item, across-session variation:} In Diginetica, the same product appears at different ranks across queries, providing within-item rank variation with item fixed effects.
+    \item \textbf{Regression discontinuity at pagination boundaries:} Products at the boundary between page 1 and page 2 have nearly identical $z_j$ but very different positional salience, identifying $b(r)$ separately from $\mathbb{E}[q \mid r]$.
+\end{enumerate}
+
+\end{document}
