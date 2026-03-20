@@ -51,24 +51,31 @@ def _safe_read(fname):
 # --- REES46 & Diginetica regression results ---
 robust = _safe_read('robust_regression_results.csv')
 if robust is not None:
-    # Combined file – parse both datasets
+    # Combined file with explicit dataset column
     for _, row in robust.iterrows():
         spec = str(row.get('specification', ''))
         outcome = str(row.get('outcome', ''))
-        # Determine dataset
-        ds = 'REES46' if 'rees' in spec.lower() or 'M1' in spec or 'M2' in spec or 'M3' in spec else 'Diginetica'
+        # Use dataset column if available
+        ds = str(row.get('dataset', ''))
+        if not ds or ds == 'nan':
+            ds = 'REES46' if 'rees' in spec.lower() or 'M1' in spec or 'M2' in spec else 'Diginetica'
         # Find p-value columns
         for col in robust.columns:
             if col.startswith('pval_'):
                 pv = row[col]
-                if pd.notna(pv) and pv != '' and float(pv) < 1.0:
-                    varname = col.replace('pval_', '')
-                    collected.append({
-                        'test_name': f'{spec} [{varname}]',
-                        'dataset': ds,
-                        'outcome': outcome,
-                        'p_original': float(pv),
-                    })
+                if pd.notna(pv) and str(pv).strip() != '':
+                    try:
+                        pv = float(pv)
+                    except (ValueError, TypeError):
+                        continue
+                    if pv < 1.0:
+                        varname = col.replace('pval_', '')
+                        collected.append({
+                            'test_name': f'{spec} [{varname}]',
+                            'dataset': ds,
+                            'outcome': outcome,
+                            'p_original': pv,
+                        })
 else:
     # Read separate files
     for fname, dataset in [('rees46_regression_results.csv', 'REES46'),
@@ -189,29 +196,44 @@ def classify_test(row):
     Primary: core wedge tests (H1-H3) on REES46 and Diginetica
       - Cart/Click ~ early_exposure (the main treatment variable)
       - Purchase ~ early_exposure
-    Secondary: item FE, heterogeneity, robustness
+      - Purchase|Cart ~ early_exposure (conditional purchase)
+    Secondary: item FE, heterogeneity, robustness, alternative specifications
     Exploratory: everything else
     """
     name = str(row['test_name']).lower()
     ds = str(row['dataset'])
     outcome = str(row['outcome']).lower()
 
-    # Primary: core specifications on REES46 and Diginetica with early_exposure
     is_core_dataset = ds in ('REES46', 'Diginetica')
     is_early_exposure = 'early_exposure' in name or 'earlyexposure' in name
-    is_core_spec = ('m1a' in name or 'm1b' in name or 'm2a' in name or 'm2b' in name
-                    or 'm3a' in name or 'm3b' in name
-                    or 'd-m1a' in name or 'd-m1b' in name or 'd-m2a' in name or 'd-m2b' in name)
+
+    # Primary: core H1-H3 tests with early_exposure on REES46/Diginetica
+    # These are: Cart/Click ~ early_exposure, Purchase ~ early_exposure,
+    # Purchase|Cart ~ early_exposure (from both robust and original results)
+    is_core_spec = False
+    # Match patterns like "M1a:", "D-M1a:", or direct specs like "Cart ~ early_exposure"
+    if 'm1a' in name or 'm2a' in name or 'm3a' in name:
+        is_core_spec = True
+    if 'd-m1a' in name or 'd-m2a' in name:
+        is_core_spec = True
+    # Also match robust_regression_results format: "Cart ~ early_exposure [hc1]" etc.
+    simple_specs = ['cart ~ early_exposure', 'click ~ early_exposure',
+                    'purchase ~ early_exposure', 'purchase|cart ~ early_exposure']
+    for sp in simple_specs:
+        if sp in name:
+            is_core_spec = True
+            break
 
     if is_core_dataset and is_early_exposure and is_core_spec:
         return 'Primary'
 
-    # Secondary: item FE, session FE, controls, top5/norm_rank variants
+    # Secondary: item FE, session FE, controls, top5/norm_rank variants, with-controls specs
     if 'item fe' in name or 'item_fe' in name or 'demeaned' in name:
         return 'Secondary'
     if 'session fe' in name or 'session_fe' in name:
         return 'Secondary'
     if is_core_dataset and is_early_exposure:
+        # With-controls variants (M1b, M2b, etc.)
         return 'Secondary'
 
     # Coveo tests are secondary (robustness / falsification)

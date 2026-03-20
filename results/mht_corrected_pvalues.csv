@@ -5,6 +5,19 @@ Click ~ rank_position [clustered],Diginetica,was_clicked,0.0,,0.0,True,,True,Exp
 "Purchase ~ rank_position (no FE, FE sample)",Diginetica,was_purchased,4.8151065193442205e-09,,7.1334911397692154e-09,True,,True,Exploratory
 Purchase ~ rank_position [hc1],Diginetica,was_purchased,0.0033009092273953,,0.004401212303193734,True,,True,Exploratory
 Purchase ~ rank_position [clustered],Diginetica,was_purchased,0.0034626676405124,,0.004467958245822451,True,,True,Exploratory
+"Click ~ early_exposure (item FE, demeaned)",Diginetica,was_clicked,4.9266316804322215e-30,6.404621184561888e-29,9.853263360864443e-30,True,True,True,Primary
+Click ~ early_exposure [hc1],Diginetica,was_clicked,4.0690069189662994e-23,5.289708994656189e-22,7.398194398120545e-23,True,True,True,Primary
+Click ~ early_exposure [clustered],Diginetica,was_clicked,2.8349353679671093e-22,3.685415978357242e-21,4.930322379073234e-22,True,True,True,Primary
+Purchase|Click ~ early_exposure (item FE),Diginetica,was_clicked,0.0455884498506484,0.5926498480584292,0.055258727091695034,True,False,False,Primary
+Purchase ~ early_exposure [clustered],Diginetica,was_purchased,0.220026140031097,1.0,0.23906442480163764,False,False,False,Primary
+Purchase ~ early_exposure [hc1],Diginetica,was_purchased,0.2211345929415148,1.0,0.23906442480163764,False,False,False,Primary
+"Purchase ~ early_exposure (item FE, demeaned)",Diginetica,was_purchased,0.2307678462742792,1.0,0.24291352239397812,False,False,False,Primary
+Purchase ~ early_exposure [hc1],REES46,was_purchased,0.0,0.0,0.0,True,True,True,Primary
+Purchase ~ early_exposure [clustered],REES46,was_purchased,0.0,0.0,0.0,True,True,True,Primary
+Cart ~ early_exposure [clustered],REES46,was_carted,2.878957222174794e-54,3.742644388827232e-53,6.774016993352456e-54,True,True,True,Primary
+Cart ~ early_exposure [hc1],REES46,was_carted,6.231321599321494e-48,8.100718079117942e-47,1.3847381331825541e-47,True,True,True,Primary
+Purchase|Cart ~ early_exposure [clustered],REES46,was_purchased,1.6046329067112776e-23,2.086022778724661e-22,3.056443631831005e-23,True,True,True,Primary
+Purchase|Cart ~ early_exposure [hc1],REES46,was_purchased,5.965715975027201e-21,7.755430767535362e-20,9.942859958378669e-21,True,True,True,Primary
 C-B1a: Click ~ EarlyExposure (Search) [early_exposure],Coveo,was_clicked,0.0,,0.0,True,,True,Secondary
 C-B1b: Click ~ Top5 (Search) [top5],Coveo,was_clicked,0.0,,0.0,True,,True,Secondary
 C-B1c: Click ~ NormRank (Search) [norm_rank],Coveo,was_clicked,0.0,,0.0,True,,True,Secondary
@@ -15,23 +28,10 @@ C-A2c: Purchase ~ NormPosition [norm_position],Coveo,was_purchased,4.18935567355
 C-A3a: Purchase|Cart ~ EarlyExposure [early_exposure],Coveo,was_purchased,2.3901987500507944e-06,,3.296825862139027e-06,True,,True,Secondary
 C-A3b: Purchase|Cart ~ NormPosition [norm_position],Coveo,was_purchased,0.0246540246461553,,0.030817530807694123,True,,True,Secondary
 C-A1b: Cart ~ Top3 [top3],Coveo,was_carted,0.64885394528245,,0.64885394528245,False,,False,Secondary
-Purchase ~ early_exposure [hc1],Diginetica,was_purchased,0.0,,0.0,True,,True,Secondary
-Purchase ~ early_exposure [clustered],Diginetica,was_purchased,0.0,,0.0,True,,True,Secondary
 "Click ~ rank_position (item FE, demeaned)",Diginetica,was_clicked,7.536043717904795e-125,,2.3187826824322448e-124,True,,True,Secondary
 "Click ~ top5 (item FE, demeaned)",Diginetica,was_clicked,1.2632611077686208e-72,,3.368696287382989e-72,True,,True,Secondary
-Cart ~ early_exposure [clustered],Diginetica,was_carted,2.878957222174794e-54,,6.774016993352456e-54,True,,True,Secondary
-Cart ~ early_exposure [hc1],Diginetica,was_carted,6.231321599321494e-48,,1.3847381331825541e-47,True,,True,Secondary
-"Click ~ early_exposure (item FE, demeaned)",Diginetica,was_clicked,4.9266316804322215e-30,,9.853263360864443e-30,True,,True,Secondary
-Purchase|Cart ~ early_exposure [clustered],Diginetica,was_purchased,1.6046329067112776e-23,,3.056443631831005e-23,True,,True,Secondary
-Click ~ early_exposure [hc1],Diginetica,was_clicked,4.0690069189662994e-23,,7.398194398120545e-23,True,,True,Secondary
-Click ~ early_exposure [clustered],Diginetica,was_clicked,2.8349353679671093e-22,,4.930322379073234e-22,True,,True,Secondary
-Purchase|Cart ~ early_exposure [hc1],Diginetica,was_purchased,5.965715975027201e-21,,9.942859958378669e-21,True,,True,Secondary
-Purchase|Click ~ early_exposure (item FE),Diginetica,was_clicked,0.0455884498506484,,0.055258727091695034,True,,False,Secondary
 "Purchase ~ rank_position (item FE, demeaned)",Diginetica,was_purchased,0.1099624129842035,,0.12936754468729825,False,,False,Secondary
 Purchase|Click ~ rank_position (item FE),Diginetica,was_clicked,0.1612325202067438,,0.1842657373791358,False,,False,Secondary
-Purchase ~ early_exposure [clustered],Diginetica,was_purchased,0.220026140031097,,0.23906442480163764,False,,False,Secondary
-Purchase ~ early_exposure [hc1],Diginetica,was_purchased,0.2211345929415148,,0.23906442480163764,False,,False,Secondary
-"Purchase ~ early_exposure (item FE, demeaned)",Diginetica,was_purchased,0.2307678462742792,,0.24291352239397812,False,,False,Secondary
 "Purchase ~ top5 (item FE, demeaned)",Diginetica,was_purchased,0.4897757992549807,,0.5023341530820316,False,,False,Secondary
 session_fe_interaction: was_carted ~ position × post_cart (session FE),REES46,was_carted,0.0,,0.0,True,,True,Secondary
 no_fe_reference: was_carted ~ post_cart (no session FE),REES46,was_carted,0.0,,0.0,True,,True,Secondary
