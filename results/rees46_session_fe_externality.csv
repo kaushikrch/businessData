@@ -1,0 +1,7 @@
+test,specification,coef,se,pval,N,n_sessions
+session_fe_postcart,was_carted ~ post_cart (session FE),0.12237574482999915,0.003382720376747654,1.4143226204078498e-286,244499,25764
+session_fe_postcart,was_purchased ~ post_cart (session FE),0.012151095240809264,0.002095496894899996,6.684287062934103e-09,244499,25764
+session_fe_interaction,was_carted ~ position × post_cart (session FE),-0.38539417193450415,0.007824290069660789,0.0,244499,25764
+session_fe_interaction,was_purchased ~ position × post_cart (session FE),-0.045697238436163294,0.005407904952486994,2.91099154782705e-17,244499,25764
+no_fe_reference,was_carted ~ post_cart (no session FE),0.5039633486728977,0.0012527288283193207,0.0,4855060,565747
+no_fe_reference,was_purchased ~ post_cart (no session FE),0.24072589552656523,0.001107067434820534,0.0,4855060,565747

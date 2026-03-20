@@ -1,0 +1,58 @@
+[13:59:38] Loading REES46 data...
+[13:59:40]   Loaded /home/user/businessData/data_raw/rees46/shard_0.parquet: 3,670,000 rows
+[13:59:42]   Loaded /home/user/businessData/data_raw/rees46/shard_1.parquet: 3,670,000 rows
+[14:00:02] Views in sessions with >= 4 items: 5,420,807
+[14:00:03] Sessions: 565,747
+[14:00:03] 
+Constructing post-cart indicators...
+[14:00:04] Items in post-cart state: 0.0290
+[14:00:04] 
+============================================================
+[14:00:04] SESSION FIXED EFFECTS: POSITION × POST-CART INTERACTION
+[14:00:04] ============================================================
+[14:00:05] Sessions with at least one cart: 27,082
+[14:00:05] Items in cart sessions: 253,408
+[14:00:05] Sessions with post_cart variation: 25,764
+[14:00:05] Items in these sessions: 244,499
+[14:00:05] 
+Demeaning within session...
+[14:00:05] 
+--- Test 1: Cart/Purchase ~ post_cart (session FE) ---
+[14:00:05]   was_carted ~ post_cart (session FE):
+[14:00:05]     Coefficient: 0.122376 (SE=0.003383, p=0.0000) ***
+[14:00:05]     norm_position: 0.086081
+[14:00:06]   was_purchased ~ post_cart (session FE):
+[14:00:06]     Coefficient: 0.012151 (SE=0.002095, p=0.0000) ***
+[14:00:06]     norm_position: 0.177619
+[14:00:06] 
+--- Test 2: Cart/Purchase ~ norm_position + post_cart + position×post_cart (session FE) ---
+[14:00:06]   was_carted ~ position × post_cart (session FE):
+[14:00:06]     norm_position:       0.371901
+[14:00:06]     post_cart:           0.241109
+[14:00:06]     position×post_cart:  -0.385394 (SE=0.007824, p=0.0000) ***
+[14:00:06]   was_purchased ~ position × post_cart (session FE):
+[14:00:06]     norm_position:       0.211509
+[14:00:06]     post_cart:           0.026230
+[14:00:06]     position×post_cart:  -0.045697 (SE=0.005408, p=0.0000) ***
+[14:00:06] 
+============================================================
+[14:00:06] POSITION GRADIENT: PRE-CART vs POST-CART
+[14:00:06] ============================================================
+[14:00:06] 
+Pre-cart items (N=87,241):
+[14:00:06]   Cart rate: 0.2953
+[14:00:06]   Purchase rate: 0.1549
+[14:00:06]   was_carted ~ norm_position: 0.030062 (p=0.0000) ***
+[14:00:06]   was_purchased ~ norm_position: 0.050616 (p=0.0000) ***
+[14:00:06] 
+Post-cart items (N=157,258):
+[14:00:06]   Cart rate: 0.5072
+[14:00:06]   Purchase rate: 0.2667
+[14:00:06]   was_carted ~ norm_position: 0.006756 (p=0.1436) 
+[14:00:06]   was_purchased ~ norm_position: 0.178215 (p=0.0000) ***
+[14:00:06] 
+============================================================
+[14:00:06] REFERENCE: NO SESSION FE (full sample)
+[14:00:06] ============================================================
+[14:00:09]   was_carted ~ post_cart (NO session FE): 0.503963 (p=0.0000) ***
+[14:00:13]   was_purchased ~ post_cart (NO session FE): 0.240726 (p=0.0000) ***
