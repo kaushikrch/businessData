@@ -249,37 +249,57 @@ except Exception as e:
 log.info('=== TEST 3: Coveo formal falsification ===')
 
 try:
-    browsing = pd.read_csv(os.path.join(DATA, 'coveo', 'train', 'browsing_train.csv'))
-    log.info(f'Loaded {len(browsing):,} Coveo browsing events')
+    # Stream Coveo browsing in chunks (36M rows) – keep only product events
+    CHUNK_SIZE = 2_000_000
+    session_events = {}  # session_id -> list of (timestamp, sku, action)
+    n_kept = 0
 
-    # Build session order
-    browsing = browsing.sort_values(['session_id_hash', 'server_timestamp_epoch_ms']).reset_index(drop=True)
-    browsing['session_order'] = browsing.groupby('session_id_hash').cumcount() + 1
-    sess_size = browsing.groupby('session_id_hash')['session_order'].transform('max')
-    browsing['norm_position'] = (browsing['session_order'] - 1) / (sess_size - 1).replace(0, 1)
-    browsing['early_exposure'] = (browsing['norm_position'] <= 0.25).astype(int)
+    for chunk in pd.read_csv(
+        os.path.join(DATA, 'coveo', 'train', 'browsing_train.csv'),
+        chunksize=CHUNK_SIZE,
+        usecols=['session_id_hash', 'event_type', 'product_action',
+                 'product_sku_hash', 'server_timestamp_epoch_ms'],
+    ):
+        chunk = chunk[chunk['event_type'] == 'event_product']
+        chunk = chunk[chunk['product_action'].isin(['detail', 'add', 'purchase'])]
+        chunk = chunk.dropna(subset=['product_sku_hash'])
 
-    # Identify cart / purchase actions
-    browsing['was_carted'] = (browsing['product_action'] == 'add').astype(int)
-    browsing['was_purchased'] = (browsing['product_action'] == 'purchase').astype(int)
+        for _, r in chunk.iterrows():
+            sid = r['session_id_hash']
+            if sid not in session_events:
+                session_events[sid] = []
+            session_events[sid].append((
+                r['server_timestamp_epoch_ms'],
+                r['product_sku_hash'],
+                r['product_action'],
+            ))
+        n_kept += len(chunk)
+        log.info(f'  Chunk processed, {n_kept:,} events, {len(session_events):,} sessions')
 
-    # Filter to detail views only (like other analyses)
-    details = browsing[browsing['product_action'] == 'detail'].copy()
-    # Merge cart/purchase indicators per session-product
-    cart_flags = browsing[browsing['was_carted'] == 1][['session_id_hash', 'product_sku_hash']].drop_duplicates()
-    cart_flags['was_carted'] = 1
-    purch_flags = browsing[browsing['was_purchased'] == 1][['session_id_hash', 'product_sku_hash']].drop_duplicates()
-    purch_flags['was_purchased'] = 1
+    log.info(f'Coveo: {n_kept:,} product events in {len(session_events):,} sessions')
 
-    details = details.merge(cart_flags, on=['session_id_hash', 'product_sku_hash'], how='left', suffixes=('_x', ''))
-    details['was_carted'] = details['was_carted'].fillna(0).astype(int)
-    details = details.merge(purch_flags, on=['session_id_hash', 'product_sku_hash'], how='left', suffixes=('_x', ''))
-    details['was_purchased'] = details['was_purchased'].fillna(0).astype(int)
+    # Build detail-level dataframe with position and outcome flags
+    rows3 = []
+    for sid, events in session_events.items():
+        events.sort(key=lambda x: x[0])
+        details_list = [(i, e) for i, e in enumerate(events) if e[2] == 'detail']
+        if len(details_list) < 2:
+            continue
+        cart_skus = {e[1] for e in events if e[2] == 'add'}
+        purch_skus = {e[1] for e in events if e[2] == 'purchase'}
+        n_detail = len(details_list)
+        for rank_idx, (_, ev) in enumerate(details_list):
+            sku = ev[1]
+            norm_pos = rank_idx / (n_detail - 1) if n_detail > 1 else 0
+            rows3.append({
+                'early_exposure': int(norm_pos <= 0.25),
+                'was_carted': int(sku in cart_skus),
+                'was_purchased': int(sku in purch_skus),
+            })
+    del session_events
 
-    # Drop any duplicated columns
-    for c in list(details.columns):
-        if c.endswith('_x'):
-            details = details.drop(columns=[c])
+    details = pd.DataFrame(rows3)
+    del rows3
 
     log.info(f'Detail views: {len(details):,}')
     log.info(f'Cart rate: {details["was_carted"].mean():.4f}, Purchase rate: {details["was_purchased"].mean():.4f}')
