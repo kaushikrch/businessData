@@ -1,0 +1,69 @@
+[13:46:52] Loading Diginetica data...
+[13:46:58] Train queries: 636,160
+[13:46:58] Clicks: 1,127,764, Purchases: 18,025
+[13:46:58] Sampled 126,938 queries
+[13:47:20] Item-position dataset: 3,566,794 rows
+[13:47:23] Click rate: 0.0185
+[13:47:23] Purchase rate: 0.000356
+[13:47:23] 
+============================================================
+[13:47:23] ITEM REPETITION ANALYSIS
+[13:47:23] ============================================================
+[13:47:24] Total unique items: 56,491
+[13:47:24] Items appearing in >= 2 queries: 48,280
+[13:47:24] Items appearing in >= 5 queries: 37,633
+[13:47:24] Items appearing in >= 10 queries: 29,111
+[13:47:24] Items appearing in >= 30 queries: 16,850
+[13:47:24] 
+Items with rank variation (rank_std > 0): 41,094
+[13:47:24] Mean rank std: 2.53
+[13:47:24] Mean rank range: 8.0
+[13:47:24] 
+============================================================
+[13:47:24] ITEM FIXED EFFECTS REGRESSIONS
+[13:47:24] ============================================================
+[13:47:24] Items with >= 5 query appearances: 37,633
+[13:47:24] Observations in FE sample: 3,529,009
+[13:47:24] Click rate in FE sample: 0.0182
+[13:47:24] Purchase rate in FE sample: 0.000353
+[13:47:24] 
+--- Method 1: Within-item demeaned regressions ---
+[13:47:25] 
+Click ~ rank_position (within-item demeaned):
+[13:47:25]   rank_position coef: -0.000766 (SE=0.000032, p=0.0000)
+[13:47:25] 
+Purchase ~ rank_position (within-item demeaned):
+[13:47:26]   rank_position coef: 0.000007 (SE=0.000004, p=0.1100)
+[13:47:26] 
+Click ~ early_exposure (within-item demeaned):
+[13:47:26]   early_exposure coef: 0.005308 (SE=0.000466, p=0.0000)
+[13:47:26] 
+Purchase ~ early_exposure (within-item demeaned):
+[13:47:27]   early_exposure coef: -0.000071 (SE=0.000059, p=0.2308)
+[13:47:27] 
+Click ~ top5 (within-item demeaned):
+[13:47:28]   top5 coef: 0.010503 (SE=0.000583, p=0.0000)
+[13:47:28] 
+Purchase ~ top5 (within-item demeaned):
+[13:47:28]   top5 coef: -0.000056 (SE=0.000081, p=0.4898)
+[13:47:28] 
+============================================================
+[13:47:28] CONDITIONAL CONVERSION WITH ITEM FE
+[13:47:28] ============================================================
+[13:47:28] Clicked items in FE sample: 64,173
+[13:47:28] Items with >= 2 clicks: 9,563
+[13:47:28] Observations: 57,553
+[13:47:28] 
+Purchase|Click ~ rank_position (item FE, demeaned):
+[13:47:28]   rank_position coef: 0.000178 (SE=0.000127, p=0.1612)
+[13:47:28] 
+Purchase|Click ~ early_exposure (item FE, demeaned):
+[13:47:28]   early_exposure coef: -0.004091 (SE=0.002047, p=0.0456)
+[13:47:28] 
+============================================================
+[13:47:28] COMPARISON: NO FE vs ITEM FE
+[13:47:28] ============================================================
+[13:47:28] 
+Baseline (no FE) on FE-eligible sample:
+[13:47:29]   Click ~ rank_position (no FE): -0.000502 (SE=0.000008)
+[13:47:29]   Purchase ~ rank_position (no FE): -0.000007 (SE=0.000001)
